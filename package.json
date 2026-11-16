@@ -17,7 +17,7 @@
     "audit:full": "npm audit --audit-level=moderate"
   },
   "dependencies": {
-    "astro": "7.4.2"
+    "astro": "7.4.11"
   },
   "engines": {
     "node": ">=22.23.4"
