@@ -1,0 +1,5 @@
+---
+// Adapted from AstroWind Headline; attribution in THIRD-PARTY-NOTICES.md.
+const {title,subtitle,tagline}=Astro.props;
+---
+<div class="headline">{tagline&&<p class="eyebrow">{tagline}</p>}<h2>{title}</h2>{subtitle&&<p>{subtitle}</p>}</div>

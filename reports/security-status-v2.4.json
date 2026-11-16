@@ -1,0 +1,39 @@
+{
+  "project": "İzmir Lokma / Hanifi Usta",
+  "version": "2.4.0",
+  "date": "2026-10-24",
+  "source_tests": {
+    "passed": 24,
+    "failed": 0,
+    "verified": true
+  },
+  "design_preserved": {
+    "verified_by_sha256": 15,
+    "differing_files": []
+  },
+  "public_assets_added": 0,
+  "static_js_changed": false,
+  "css_changed": false,
+  "added_public_http_requests": 0,
+  "build": {
+    "verified": false,
+    "reason": "Node 22.16.0 below required 22.23.4, npm registry DNS unavailable"
+  },
+  "npm_audit": {
+    "verified": false,
+    "reason": "npm registry DNS EAI_AGAIN"
+  },
+  "live_http_tls_waf_dns": {
+    "verified": false,
+    "reason": "domain DNS unreachable here, hosting provider account unconnected"
+  },
+  "browser_e2e_lighthouse": {
+    "verified": false,
+    "reason": "requires built site and accessible browser"
+  },
+  "github_actions_active": false,
+  "hosting_waf_active": null,
+  "live_site_changed": false,
+  "deployment_approval": false,
+  "no_attack_immunity_claim": true
+}

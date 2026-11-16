@@ -1,0 +1,57 @@
+---
+import '../styles/site.css';
+import {whatsapp} from '../data/site';
+const {title='İzmir Lokması ve Saray Lokması | Hanifi Usta',description='Hayır, mevlit ve özel günler için İzmir lokması ve saray lokması ikramı. Tarih, konum ve kişi sayınızı paylaşarak WhatsApp’tan uygunluk ve teklif alın.',noindex=false}=Astro.props;
+const canonical=new URL(Astro.url.pathname,Astro.site);
+const homepage='https://izmirlokmasi.com';
+const schema={
+  '@context':'https://schema.org',
+  '@graph':[
+    {'@type':'Organization','@id':homepage+'/#organization',name:'İzmir Lokmacısı Hanifi Usta',url:homepage,logo:homepage+'/images/hanifi-logo-vector-integrated.webp',telephone:'+905306902501'},
+    {'@type':'WebSite','@id':homepage+'/#website',url:homepage,name:'Hanifi Usta · Meşhur İzmir Lokmacısı',inLanguage:'tr-TR',publisher:{'@id':homepage+'/#organization'}}
+  ]
+};
+---
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <!-- Pages yanit basliklarini degistiremedigi icin istemci tarafinda CSP. frame-ancestors / HSTS icin HTTP basligi gerekir. -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; script-src-attr 'none'; style-src 'self'; style-src-attr 'none'; img-src 'self'; font-src 'self'; connect-src 'self'; frame-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests"/>
+  <title>{title}</title>
+  <meta name="description" content={description}/>
+  <link rel="canonical" href={canonical}/>
+  <link rel="icon" href="/favicon.svg"/>
+  <meta name="robots" content={noindex?"noindex,follow":"index,follow,max-image-preview:large"}/>
+  <meta property="og:site_name" content="Hanifi Usta · Meşhur İzmir Lokmacısı"/>
+  <meta property="og:title" content={title}/>
+  <meta property="og:description" content={description}/>
+  <meta property="og:url" content={canonical}/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:locale" content="tr_TR"/>
+  <meta property="og:image" content="https://izmirlokmasi.com/images/og-hanifi-usta.webp"/>
+  <meta property="og:image:alt" content="İzmir lokması ve saray lokması ikramı – Hanifi Usta"/>
+  <meta property="og:image:width" content="1200"/>
+  <meta property="og:image:height" content="630"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content={title}/>
+  <meta name="twitter:description" content={description}/>
+  <meta name="twitter:image" content="https://izmirlokmasi.com/images/og-hanifi-usta.webp"/>
+  <script type="application/ld+json" set:html={JSON.stringify(schema).replace(/</g,'\\u003c')}/>
+</head>
+<body>
+<a class="skip" href="#main">İçeriğe geç</a>
+<div class="top-note"><span>HAYIR • MEVLİT • ÖZEL GÜN LOKMASI</span><a href={whatsapp} target="_top" aria-label="WhatsApp üzerinden bilgi alın">Tarihinizi birlikte planlayalım <span aria-hidden="true">↗</span></a></div>
+<header class="header">
+  <a class="brand" href="/" aria-label="Hanifi Usta ana sayfa">
+    <img src="/images/hanifi-logo-vector-integrated.webp" width="72" height="72" alt=""/>
+    <span>Hanifi Usta<small>MEŞHUR İZMİR LOKMACISI</small></span>
+  </a>
+  <a class="button button-header" href={whatsapp} target="_top"><img class="wa-icon" src="/icons/whatsapp.svg" alt="" width="21" height="21"/> WhatsApp’tan yazın</a>
+</header>
+<slot/>
+<footer class="footer footer-minimal"><div class="footer-identity"><a class="footer-word" href="/">Hanifi Usta</a><span>Lokmanın en güzel yanı, paylaşılması.</span></div><div class="footer-meta"><span>© {new Date().getFullYear()} Hanifi Usta</span><a href="/gizlilik">Gizlilik ve görsel bilgileri</a></div></footer>
+<a class="floating-wa" href={whatsapp} target="_top" aria-label="Hanifi Usta’ya WhatsApp’tan yazın"><img class="wa-icon" src="/icons/whatsapp.svg" alt="" width="21" height="21"/><span>WhatsApp’tan yazın</span><span aria-hidden="true">↗</span></a>
+<script is:inline src="/js/site.js" defer></script>
+</body></html>

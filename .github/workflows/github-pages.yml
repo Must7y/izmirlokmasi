@@ -1,0 +1,54 @@
+name: Izmir Lokma - GitHub Pages yayini
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: izmir-lokma-pages
+  cancel-in-progress: false
+
+jobs:
+  build-and-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Depoyu al
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - name: Uyumlu Node.js kur
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: '22.23.4'
+          cache: npm
+      - name: Bagimliliklari kilitli surumlerle kur
+        run: npm ci
+      - name: Kaynak ve guvenlik testlerini calistir
+        run: npm run test:source
+      - name: Gercek Astro derlemesi, rota ve dosya testleri
+        run: npm run test:build
+      - name: Uretim bagimliliklarini guvenlik acisindan tara
+        run: npm run audit:deps
+      - name: Pages yapitini yukle
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: ./dist
+
+  deploy:
+    needs: build-and-check
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: GitHub Pages uzerinde yayinla
+        id: deployment
+        uses: actions/deploy-pages@v5
