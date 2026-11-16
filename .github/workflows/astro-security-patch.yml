@@ -1,0 +1,54 @@
+name: Hanifi Usta - Astro yama guncelleme onerisi
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/astro-security-patch.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: astro-security-patch
+  cancel-in-progress: false
+
+jobs:
+  propose-patch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Depoyu al
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - name: Guvenli Node surumunu kur
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: '22.23.4'
+          cache: npm
+      - name: Mevcut kilit dosyasindan kur
+        run: npm ci
+      - name: Astro surumunu ve kilit dosyasini birlikte yenile
+        run: npm install astro@7.4.11 --save-exact
+      - name: Yerel kaynak testleri, gercek build ve statik sayfa testleri
+        run: npm test
+      - name: Ana dala dokunmadan guncelleme dali ac
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if git diff --quiet -- package.json package-lock.json; then
+            echo 'Yama zaten uygulanmis; degisiklik yok.'
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -b security/astro-7.4.11
+          git add package.json package-lock.json
+          git commit -m "chore(security): update Astro to 7.4.11"
+          git push --set-upstream origin security/astro-7.4.11
+          gh pr create --base main --head security/astro-7.4.11 \
+            --title "Güvenlik: Astro 7.4.11 güncellemesi" \
+            --body "Astro 7.4.2 -> 7.4.11. package-lock.json npm tarafından yenilendi. Gerçek build ve testler GitHub Actions ortamında çalıştırıldı. CI ve npm audit başarılı olmadan birleştirmeyin. Otomatik birleştirme yok." || echo "::warning::Dal olusturuldu; depo ayarlari PR olusturmayi engellemis olabilir. Elle PR acin."
+      - name: Uretim bagimliligi guvenlik denetimi
+        run: npm run audit:deps
