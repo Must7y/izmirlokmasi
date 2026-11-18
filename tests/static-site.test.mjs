@@ -1,4 +1,4 @@
-import {readFile,access} from 'node:fs/promises';
+import {readFile,access,stat} from 'node:fs/promises';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 const routes=['','izmir-lokmasi','saray-lokmasi','hayir-lokmasi','mevlit-lokmasi','iletisim','gizlilik'];
@@ -18,4 +18,31 @@ test('Cloudflare Pages için 404.html bulunur, arama motorlarına kapalıdır ve
  assert.match(html,/Hanifi Usta/);
  assert.match(html, /Ana sayfaya dön/);
  assert.match(html, /href="\/"/);
+});
+
+test('site haritasındaki adresler sayfanın canonical adresiyle eşleşir', async () => {
+  const xml = await readFile(new URL('../dist/sitemap.xml', import.meta.url), 'utf8');
+  const publicRoutes = routes.filter(route => route !== 'gizlilik');
+  const expected = publicRoutes.map(route => 'https://izmirlokmasi.com/' + (route ? route + '/' : ''));
+  const locations = Array.from(xml.matchAll(/<loc>([^<]+)<\/loc>/g), match => match[1]);
+  assert.deepEqual(locations.sort(), expected.slice().sort());
+  for (const [index, route] of publicRoutes.entries()) {
+    const html = await readFile(file(route), 'utf8');
+    assert.ok(html.includes('rel="canonical" href="' + expected[index] + '"'), expected[index]);
+  }
+});
+
+test('ana fotoğrafın mobil sürümü üretilir ve 50 KB altındadır', async () => {
+  const html = await readFile(file(''), 'utf8');
+  const hero = html.match(/<img\b[^>]*fetchpriority="high"[^>]*>/)?.[0];
+  assert.ok(hero, 'Ana görsel yüksek öncelikli olmalı');
+  const srcset = hero.match(/srcset="([^"]+)"/)?.[1];
+  assert.ok(srcset, 'Ana görselin ekran genişliğine uygun seçenekleri olmalı');
+  const variants = new Map(srcset.split(',').map(candidate => candidate.trim().split(/\s+/).reverse()));
+  for (const width of ['480w', '768w', '1024w', '1280w']) {
+    assert.match(variants.get(width) ?? '', /^\/_astro\/[^/]+\.webp$/);
+    await access(new URL('../dist' + variants.get(width), import.meta.url));
+  }
+  const mobile = await stat(new URL('../dist' + variants.get('480w'), import.meta.url));
+  assert.ok(mobile.size < 50_000, 'Mobil ana görsel: ' + mobile.size + ' bayt');
 });

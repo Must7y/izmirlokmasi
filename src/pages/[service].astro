@@ -9,6 +9,13 @@ const titles = {
   'hayir-lokmasi': 'Hayır Lokması Dökümü',
   'mevlit-lokmasi': 'Mevlit İçin Lokma Dökümü',
 };
+const planning = {
+  'izmir-lokmasi': ['Halka lokma ikramı nasıl planlanır?', 'İkramın başlayacağı saati ve yaklaşık kişi sayısını paylaşın. Lokmanın nerede hazırlanacağını ve servis alanını önceden birlikte belirleyelim.'],
+  'saray-lokmasi': ['Saray lokmasını ne zaman tercih edebilirsiniz?', 'Küçük, yuvarlak lokma ikramı istediğinizde saray lokmasını seçebilirsiniz. Teklif için etkinliğin tarihini, adresini ve tahmini misafir sayısını yazın.'],
+  'hayir-lokmasi': ['Hayır lokması dağıtımı için neler gerekir?', 'Dağıtım yerini ve ikrama başlamak istediğiniz saati paylaşın. Yerinde hazırlık ve servis alanını konuma göre birlikte değerlendirelim.'],
+  'mevlit-lokmasi': ['Mevlit sonrası ikram saati nasıl belirlenir?', 'Programın tahmini bitiş saatini, adresi ve misafir sayısını iletin. Hazırlık ve servisi programınıza göre planlayalım.'],
+};
+const [planningTitle, planningText] = planning[service.slug as keyof typeof planning];
 const photo=service.slug==='saray-lokmasi'?'/images/saray-lokmasi-photo.webp':'/images/lokma-real-appetizing.webp';
 const photoAlt=service.slug==='saray-lokmasi'?'Şerbetli yuvarlak saray lokması':'Şerbetli halka İzmir lokması';
 ---
@@ -16,8 +23,17 @@ const photoAlt=service.slug==='saray-lokmasi'?'Şerbetli yuvarlak saray lokması
   <main id="main">
     <section class="service-hero section">
       <div><a class="text-link" href="/">← Ana sayfa</a><p class="eyebrow">{service.tag}</p><h1>{service.name}</h1><p>{service.body}</p><a class="button" href={whatsapp} target="_top">Bilgi ve fiyat alın ↗</a></div>
-      <img src={photo} alt={photoAlt} width={1280} height={960} loading="eager" decoding="async"/>
+      <img src={photo} alt={photoAlt} width={1280} height={960} loading="eager" fetchpriority="high" decoding="async"/>
     </section>
-    <section class="section service-info"><h2>Siparişi birlikte planlayalım.</h2><p>Tarih, adres, kişi sayısı ve tercih ettiğiniz lokma türünü iletin. Müsaitlik, hazırlık koşulları ve güncel fiyatı görüşelim.</p><div class="related">{services.filter(s=>s.slug!==service.slug).map(s=><a href={'/'+s.slug}>{s.name} ↗</a>)}</div></section>
+    <section class="section service-info">
+      <h2>{planningTitle}</h2>
+      <p>{planningText}</p>
+      <div class="related">
+        <a href="/iletisim/">Lokma dökümü için iletişim ↗</a>
+        {services.filter(item => item.slug !== service.slug).map(item =>
+          <a href={'/' + item.slug + '/'}>{item.name} ↗</a>
+        )}
+      </div>
+    </section>
   </main>
 </Layout>
