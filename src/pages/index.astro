@@ -1,4 +1,6 @@
 ---
+import { Image } from "astro:assets";
+import heroPhoto from "../../public/images/hero-mixed-lokma.webp";
 import Layout from '../layouts/Layout.astro';
 import Headline from '../components/Headline.astro';
 import LokmaSlider from '../components/LokmaSlider.astro';
@@ -15,7 +17,7 @@ import {whatsapp,services} from '../data/site';
       <div class="hero-trust" aria-label="Hizmet özeti"><span>Konuma göre planlama</span><span>Hayır & mevlit</span><span>Özel günler</span></div>
     </div>
     <div class="hero-art">
-      <div class="hero-stage"><div class="hero-photo"><img src="/images/hero-mixed-lokma.webp" alt="İzmir halka lokması ile yuvarlak saray lokmasının birlikte sunulduğu tepsi" width="1280" height="960" fetchpriority="high" loading="eager" decoding="async"/></div></div>
+      <div class="hero-stage"><div class="hero-photo"><Image src={heroPhoto} widths={[480, 768, 1024, 1280]} sizes="(max-width: 800px) 92vw, 52vw" format="webp" alt="İzmir halka lokması ile yuvarlak saray lokmasının birlikte sunulduğu tepsi" width="1280" height="960" fetchpriority="high" loading="eager" decoding="async"/></div></div>
       <div class="hero-side-note"><span>İKRAMIN GÜZEL TARAFI</span><strong>Birlikte<br/>paylaşmak.</strong></div>
       <div class="hero-number"><span>01 / 02</span><span>İZMİR & SARAY LOKMASI</span></div>
     </div>
