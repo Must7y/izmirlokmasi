@@ -1,13 +1,18 @@
 ---
 import '../styles/site.css';
 import {whatsapp} from '../data/site';
-const {title='İzmir Lokması ve Saray Lokması | Hanifi Usta',description='Hayır, mevlit ve özel günler için İzmir lokması ve saray lokması ikramı. Tarih, konum ve kişi sayınızı paylaşarak WhatsApp’tan uygunluk ve teklif alın.',noindex=false}=Astro.props;
-const canonical=new URL(Astro.url.pathname,Astro.site);
+const {title='İstanbul ve Çevre İllerde Lokma Dökümü | Hanifi Usta',description='İstanbul ve çevre illerde hayır, mevlit ve özel günler için yerinde İzmir lokması ve saray lokması döküyoruz. Tarih ve konumunuzu paylaşarak teklif alın.',noindex=false}=Astro.props;
+const canonical=new URL(Astro.url.pathname.replace(/\/?$/, '/'), Astro.site);
 const homepage='https://izmirlokmasi.com';
+const socialProfiles = [
+  { name: 'Instagram', url: 'https://www.instagram.com/hanifiusta008/' },
+  { name: 'YouTube', url: 'https://www.youtube.com/@hanifiklc8999' },
+];
+const facebookShareUrl = 'https://www.facebook.com/share/1E5EyhL6fV/';
 const schema={
   '@context':'https://schema.org',
   '@graph':[
-    {'@type':'Organization','@id':homepage+'/#organization',name:'İzmir Lokmacısı Hanifi Usta',url:homepage,logo:homepage+'/images/hanifi-logo-vector-integrated.webp',telephone:'+905306902501'},
+    {'@type':'Organization','@id':homepage+'/#organization',name:'İzmir Lokmacısı Hanifi Usta',url:homepage,logo:homepage+'/images/hanifi-logo-vector-integrated.webp',telephone:'+905306902501',sameAs:socialProfiles.map(profile => profile.url)},
     {'@type':'WebSite','@id':homepage+'/#website',url:homepage,name:'Hanifi Usta · Meşhur İzmir Lokmacısı',inLanguage:'tr-TR',publisher:{'@id':homepage+'/#organization'}}
   ]
 };
@@ -51,7 +56,9 @@ const schema={
   <a class="button button-header" href={whatsapp} target="_top"><img class="wa-icon" src="/icons/whatsapp.svg" alt="" width="21" height="21"/> WhatsApp’tan yazın</a>
 </header>
 <slot/>
-<footer class="footer footer-minimal"><div class="footer-identity"><a class="footer-word" href="/">Hanifi Usta</a><span>Lokmanın en güzel yanı, paylaşılması.</span></div><div class="footer-meta"><span>© {new Date().getFullYear()} Hanifi Usta</span><a href="/gizlilik">Gizlilik ve görsel bilgileri</a></div></footer>
+<footer class="footer footer-minimal"><div class="footer-identity"><a class="footer-word" href="/">Hanifi Usta</a><span>Lokmanın en güzel yanı, paylaşılması.</span></div><div class="footer-meta"><span>© {new Date().getFullYear()} Hanifi Usta</span><a href="/gizlilik">Gizlilik ve görsel bilgileri</a>
+  {socialProfiles.map(profile => <a href={profile.url}>{profile.name}</a>)}
+  <a href={facebookShareUrl}>Facebook</a></div></footer>
 <a class="floating-wa" href={whatsapp} target="_top" aria-label="Hanifi Usta’ya WhatsApp’tan yazın"><img class="wa-icon" src="/icons/whatsapp.svg" alt="" width="21" height="21"/><span>WhatsApp’tan yazın</span><span aria-hidden="true">↗</span></a>
 <script is:inline src="/js/site.js" defer></script>
 </body></html>

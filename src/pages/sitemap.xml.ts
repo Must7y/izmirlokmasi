@@ -1,2 +1,8 @@
-import {services} from '../data/site';
-export function GET(){return new Response('<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'+['',...services.map(s=>s.slug),'iletisim'].map(p=>'<url><loc>https://izmirlokmasi.com/'+p+'</loc></url>').join('')+'</urlset>',{headers:{'Content-Type':'application/xml'}})}
+import { services } from '../data/site';
+
+export function GET() {
+  const pages = ['/', ...services.map(service => '/' + service.slug + '/'), '/iletisim/'];
+  const entries = pages.map(path => '<url><loc>https://izmirlokmasi.com' + path + '</loc></url>');
+  const xml = '<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' + entries.join('') + '</urlset>';
+  return new Response(xml, { headers: { 'Content-Type': 'application/xml' } });
+}
