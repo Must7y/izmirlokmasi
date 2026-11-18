@@ -23,14 +23,14 @@ import {whatsapp,services} from '../data/site';
   <div class="ribbon" aria-label="Lokma ikramı vesileleri"><span>HAYIR</span><i aria-hidden="true">◆</i><span>MEVLİT</span><i aria-hidden="true">◆</i><span>KUTLAMA</span><i aria-hidden="true">◆</i><span>PAYLAŞMAK</span></div>
   <section class="intro section" id="lokmalar" data-reveal>
     <div><p class="eyebrow">KÜÇÜK BİR LOKMA, BÜYÜK BİR ANLAM</p><h2>Mutluluk,<br/><em>paylaşınca</em><br/>çoğalır.</h2></div>
-    <div class="intro-copy"><p>Bir hayrı paylaşmak, sevdiklerinizi anmak ya da güzel bir günü tatlandırmak için…</p><p>Hanifi Usta olarak İzmir lokması ve saray lokması ikramını tarih, adres ve kişi sayınıza göre birlikte planlıyoruz. Siz vesilenizi söyleyin, ayrıntıları konuşalım.</p><div class="related"><a href="/izmir-lokmasi">İzmir lokması <span aria-hidden="true">↗</span></a><a href="/saray-lokmasi">Saray lokması <span aria-hidden="true">↗</span></a></div></div>
+    <div class="intro-copy"><p>Bir hayrı paylaşmak, sevdiklerinizi anmak ya da güzel bir günü tatlandırmak için…</p><p>Hanifi Usta olarak İzmir lokması ve saray lokması ikramını tarih, adres ve kişi sayınıza göre birlikte planlıyoruz. Siz vesilenizi söyleyin, ayrıntıları konuşalım.</p><div class="related"><a href="/izmir-lokmasi/">İzmir lokması <span aria-hidden="true">↗</span></a><a href="/saray-lokmasi/">Saray lokması <span aria-hidden="true">↗</span></a></div></div>
   </section>
   <LokmaSlider/>
   <section class="section occasions" id="hizmet">
     <div class="occasion-top" data-reveal><Headline tagline="HER GÜZEL VESİLEDE" title="Lokma paylaşmak için bir neden yeter."/><p>Bir anma, bir dua, bir kutlama…<br/>İkramınızı birlikte planlayalım.</p></div>
     <div class="occasion-grid">
-      {services.slice(2).map((s,i)=><a class="occasion" href={'/'+s.slug} data-reveal><span class="number">0{i+1} — İKRAM</span><span class="occasion-icon" aria-hidden="true"></span><h3>{s.name}</h3><p>{s.body}</p><span class="corner" aria-hidden="true">↗</span></a>)}
-      <a class="occasion" href="/iletisim" data-reveal><span class="number">03 — İKRAM</span><span class="occasion-icon" aria-hidden="true"></span><h3>Özel günler</h3><p>Düğün, sünnet, açılış veya bir kutlama. Tarihinizi ve kişi sayısını paylaşın, organizasyonunuzu birlikte planlayalım.</p><span class="corner" aria-hidden="true">↗</span></a>
+      {services.slice(2).map((s,i)=><a class="occasion" href={'/' + s.slug + '/'} data-reveal><span class="number">0{i+1} — İKRAM</span><span class="occasion-icon" aria-hidden="true"></span><h3>{s.name}</h3><p>{s.body}</p><span class="corner" aria-hidden="true">↗</span></a>)}
+      <a class="occasion" href="/iletisim/" data-reveal><span class="number">03 — İKRAM</span><span class="occasion-icon" aria-hidden="true"></span><h3>Özel günler</h3><p>Düğün, sünnet, açılış veya bir kutlama. Tarihinizi ve kişi sayısını paylaşın, organizasyonunuzu birlikte planlayalım.</p><span class="corner" aria-hidden="true">↗</span></a>
     </div>
   </section>
   <section class="planning section" id="nasil">
