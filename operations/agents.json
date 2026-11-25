@@ -1,0 +1,126 @@
+{
+  "version": 1,
+  "runtime": "project-native Node checks; no persistent LLM workers installed",
+  "production_write": false,
+  "roles": [
+    {
+      "id": "seo-technical",
+      "mode": "deterministic",
+      "status": "tested",
+      "upstream": [
+        "claude-seo:seo-technical",
+        "claude-seo:seo-sitemap",
+        "claude-seo:seo-drift"
+      ],
+      "command": "npm run audit:site -- --output outputs/maintenance",
+      "checks": [
+        "canonical",
+        "title",
+        "description",
+        "H1",
+        "robots",
+        "sitemap",
+        "internal-links"
+      ],
+      "trigger": "quality.yml: push, pull_request, Monday 06:41 UTC"
+    },
+    {
+      "id": "seo-schema",
+      "mode": "deterministic",
+      "status": "tested",
+      "upstream": [
+        "claude-seo:seo-schema"
+      ],
+      "command": "node --test tests/seo-audit.test.mjs",
+      "checks": [
+        "JSON-LD syntax",
+        "Organization",
+        "WebSite",
+        "WebPage",
+        "Service references"
+      ],
+      "trigger": "test:build"
+    },
+    {
+      "id": "security",
+      "mode": "deterministic-and-review",
+      "status": "tested-locally-ci-pending",
+      "upstream": [
+        "pya:dependency-auditor",
+        "pya:iac-scanner",
+        "pya:secret-scanner",
+        "pya:agentic-auditor",
+        "pya:finding-verifier"
+      ],
+      "command": "npm run test:source && npm run audit:full",
+      "checks": [
+        "CSP",
+        "no tracking",
+        "bundle leakage",
+        "locked dependencies",
+        "workflow permissions"
+      ],
+      "trigger": "quality.yml; CodeQL separately"
+    },
+    {
+      "id": "live-health",
+      "mode": "deterministic",
+      "status": "tested-on-current-production-with-expected-drift",
+      "upstream": [
+        "claude-seo:seo-technical",
+        "claude-seo:seo-drift"
+      ],
+      "command": "npm run verify:live -- https://izmirlokmasi.com",
+      "checks": [
+        "HTTP",
+        "404",
+        "CSP meta",
+        "page SEO",
+        "robots",
+        "sitemap",
+        "contact link presence"
+      ],
+      "trigger": "site-health.yml: Monday 06:23 UTC"
+    },
+    {
+      "id": "knowledge",
+      "mode": "review",
+      "status": "documented",
+      "upstream": [
+        "claude-obsidian:wiki-ingest",
+        "claude-obsidian:wiki-lint",
+        "claude-obsidian:verifier"
+      ],
+      "artifacts": [
+        "operations/README.md",
+        "operations/sources.json",
+        "reports/SEO-SECURITY-2026-11-26.md"
+      ],
+      "trigger": "each maintenance session"
+    },
+    {
+      "id": "paid-media",
+      "mode": "review",
+      "status": "needs_input",
+      "upstream": [
+        "claude-ads:audit-google",
+        "claude-ads:audit-tracking",
+        "claude-ads:audit-budget",
+        "claude-ads:source-verifier"
+      ],
+      "missing": [
+        "ad account export",
+        "date range",
+        "currency",
+        "timezone",
+        "objective",
+        "conversion definition",
+        "approved budget"
+      ],
+      "artifacts": [
+        "operations/ads-plan.md"
+      ],
+      "trigger": "when actual account evidence is supplied"
+    }
+  ]
+}

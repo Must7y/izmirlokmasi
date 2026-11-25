@@ -32,4 +32,8 @@ Daha önce başarılı olan kaynak testleri, gerçek üretim derlemesinin veya c
 
 ## 16 Kasım 2026 güvenlik görevi
 
-Astro `7.4.2` bilinen güncel duyurulardan etkileniyor. `7.4.12` güncellemesini npm üzerinden kilit dosyasıyla birlikte yap; elle SHA/integrity tahmin etme. Test/audit geçmeden yayına çıkma.
+Bu görev tamamlandı: Astro `7.4.12` package.json ve kilit dosyasında eşleşiyor. Güncel sürüm için bu iki dosyayı esas al; eski duyuru sürümünü tekrar kurma. Yeni güvenlik güncellemelerini gerçek npm verisiyle değerlendir, elle SHA/integrity tahmin etme. Test/audit geçmeden yayına çıkma.
+
+## Bakım kayıtları
+
+Yeni çalışmada `operations/README.md`, `operations/agents.json` ve en yeni tarihli raporu oku. Kaynak eklentilerin sabit sürümleri `operations/sources.json` içindedir; ajan tanımı bulunması kurulum/çalıştırma kanıtı değildir. `npm test` ve `npm run audit:full` sonrasında `npm run audit:site -- --output outputs/maintenance` ile sayfa kanıtını kaydet. Canlı sürüm ve yayınlanmamış aday sonuçlarını ayrı raporla.

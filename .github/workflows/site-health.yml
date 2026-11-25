@@ -24,4 +24,14 @@ jobs:
         with:
           node-version: '22.23.4'
       - name: HTTPS, sayfalar, SEO, baglantilar ve hassas yol kontrolu
-        run: node scripts/verify-live.mjs https://izmirlokmasi.com
+        shell: bash
+        run: |
+          mkdir -p outputs/live
+          node scripts/verify-live.mjs https://izmirlokmasi.com 2>&1 | tee outputs/live/verification.log
+      - name: Canli kontrol raporunu sakla
+        if: always()
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        with:
+          name: site-health-${{ github.run_id }}
+          path: outputs/live/
+          retention-days: 30

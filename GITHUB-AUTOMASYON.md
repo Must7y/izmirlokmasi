@@ -1,30 +1,19 @@
-# İzmir Lokmacısı — bakım otomasyonları ve kaynak seçimi
+# Bakım kontrolleri
 
-Bu dosya planlanmış GitHub Actions işlerinin ne yapacağını anlatır. **Repo oluşturulmadan iş akışları etkin olmaz.**
+Bu görevler yapay zekâ servisleri değil, GitHub Actions kontrolleridir. Kaynak ajan yöntemleri ve veri gerektiren görevler [bakım kayıtlarında](operations/README.md) açıklanır.
 
-| Bileşen / upstream | Projede kullanılan kısmı | Neden |
-| --- | --- | --- |
-| [Astro](https://github.com/withastro/astro) | Kilitli statik site derlemesi | Ek sunucu/veritabanı gerektirmeden HTML üretir |
-| [AstroWind](https://github.com/arthelokyo/astrowind) | Önceki sürümden korunan lisanslı tasarım uyarlaması | Tüm temayı veya Tailwind'i kopyalamak gerekmez |
-| [GitHub Actions](https://github.com/actions) | Kaynak testi, derleme, güvenlik denetimi, Pages yayını | Üretim testleri geçmeden dağıtım yok |
-| [CodeQL](https://github.com/github/codeql-action) | JS/TS ve Actions YAML güvenlik analizleri | Kod ve yayın hattı sorunlarına karşı tarama |
-| [Dependabot](https://docs.github.com/en/code-security/dependabot) | Haftalık npm, aylık Actions güncelleme PR'ları | İnsan onayı olmadan birleştirme yok |
-| Site sağlık kontrolü | `scripts/verify-live.mjs`, haftalık read-only kontrol | HTTPS, sayfalar, SEO, kaynak ve 404 kontrolleri |
+| İş akışı | Tetikleme | İşlev |
+|---|---|---|
+| quality | PR/main, pazartesi 09:41 Türkiye saati, elle | Kaynak testleri, gerçek build, SEO ve tüm bağımlılıkların güvenlik denetimi; SEO raporunu saklar |
+| github-pages | main ve elle | Test/audit kapısından sonra Pages dağıtımı ve canlı commit doğrulaması |
+| site-health | Pazartesi 09:23 Türkiye saati ve elle | Canlı sayfalar, metadata, sitemap, robots, HTTPS ve hassas dosya/404 kontrolü |
+| codeql | PR/main, mevcut çarşamba planı ve elle | JavaScript/TypeScript ve Actions kaynak analizi |
+| Dependabot | Haftalık npm, aylık Actions | İncelenecek güncelleme PR'ları; otomatik birleştirme yok |
 
-**Eklenmeyenler (bilinçli karar):** Playwright/axe-core/Lighthouse CI. Gerçek tarayıcı testi için ileride eklenebilirler, ancak bu sürümde npm kilit dosyası güvenilir şekilde yenilenemediğinden kurulu veya çalıştırılmış gibi gösterilmez. Harici yorum/anti-spam servisi de yoktur: sitede spam üretecek kullanıcı girdisi bulunmuyor.
+Planlı işler gecikebilir. Denetimler `contents: read` kullanır. Pages dağıtımı yalnız kendi işinde `pages: write` ve `id-token: write`, CodeQL sonuç yükleme yalnız güvenlik işinde `security-events: write` kullanır. CodeQL sonucu ayrıca incelenir; Pages build işinin bağımlılığı değildir.
 
-## Ajan kullanım kuralı
+SEO Markdown/JSON ve canlı kontrol günlükleri iş çıktısı olarak 30 gün tutulur. Uzun süre korunacak sonuçlar tarihli rapora ve Drive yedeğine alınır. Bu süre kalıcı arşiv garantisi değildir.
 
-`AGENTS.md` güvenli çalışma sınırlarını belirler; otonom bir ajan kurmaz. GitHub Actions bir **otomasyon altyapısıdır**, yapay zekâ ajanı değildir. Codex/Copilot gibi araçlar ayrıca kullanıcı tarafından etkinleştirilmedikçe otomatik kod geliştirme yapmaz.
+İstemciye ek test kütüphanesi gönderilmez. Tarayıcı, erişilebilirlik ve Lighthouse testleri ayrı bakım ortamında yapılabilir; sonuçları gerçek çalıştırma kaydı olmadan başarılı sayılmaz. Yeni ana sürüm, izleyici, form, reklam bütçesi veya otonom kod birleştirme bu düzenin parçası değildir.
 
-## Yayın kapısı
-
-1. `Must7y/izmirlokmasi` depoda kaynak dosyaları kökte bulunmalı.
-2. `Settings → Pages → Source → GitHub Actions` etkin olmalı.
-3. `quality`, `github-pages` ve `CodeQL` iş akışı çıktılarına bakılmalı. *CodeQL sonucu ayrıca incelenir; şu an dağıtımın otomatik engelleyicisi değildir.*
-4. Alan adı GitHub Pages'e doğrulanıp DNS güncellenmeli. Önceki DNS mail kayıtları korunmalı.
-5. Yayın adresi doğrulanınca haftalık site sağlığı kontrolü çalıştırılmalı.
-
-## Yayın öncesi açık güvenlik işi (16.11.2026)
-
-Mevcut kaynak Astro `7.4.2` ile kilitli. 13 Kasım 2026'da yayımlanan güvenlik duyurularından etkilenen sürümdür. GitHub üzerinde Dependabot ile Astro `7.4.12` için PR açılmalı, lockfile gerçek npm işlemiyle güncellenmeli, CI ve audit geçtikten sonra birleştirilmelidir. Bu adım atlanarak güvenli yayın yapıldığı iddia edilmez.
+Astro 7.4.2 için eski güvenlik görevi tamamlanmıştır; güncel sürümün tek kaynağı package.json ve package-lock.json'dır. Eski duyuru sürümü tekrar kurulacak hedef olarak kullanılmaz. Her yeni güncelleme kendi bağımlılık ve regresyon incelemesinden geçer.

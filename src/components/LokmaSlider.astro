@@ -17,7 +17,7 @@ const items = [
     {items.map((item, i) =>
       <article class="tasting-card" aria-label={`${i + 1} / ${items.length}: ${item.name}`}>
         <div class="tasting-image"><img src={`/images/${item.image}`} alt={`${item.name} fotoğrafı`} width={item.width} height={item.height} loading="lazy" decoding="async"/></div>
-        <div class="tasting-copy"><span class="eyebrow">0{i + 1} / LOKMALARIMIZ</span><h3>{item.name}</h3><p class="tasting-sub">{item.sub}</p><p>{item.description}</p><a class="text-link" href={`/${item.path}`}>Yakından tanıyın ↗</a></div>
+        <div class="tasting-copy"><span class="eyebrow">0{i + 1} / LOKMALARIMIZ</span><h3>{item.name}</h3><p class="tasting-sub">{item.sub}</p><p>{item.description}</p><a class="text-link" href={`/${item.path}/`}>{item.name} hakkında bilgi ↗</a></div>
       </article>
     )}
   </div>

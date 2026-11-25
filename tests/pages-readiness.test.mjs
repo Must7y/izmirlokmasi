@@ -30,5 +30,5 @@ test('ozel domain ve otomatik CodeQL guvenlik taramasi tanimli',async()=>{
   assert.match(codeql,/javascript-typescript, actions/);
   assert.match(codeql,/languages: \$\{\{ matrix.language \}\}/);
   assert.match(codeql,/security-events: write/);
-  assert.match(codeql,/github\/codeql-action\/analyze@v4/);
+  assert.match(codeql,/github\/codeql-action\/analyze@[a-f0-9]{40}/);
 });
