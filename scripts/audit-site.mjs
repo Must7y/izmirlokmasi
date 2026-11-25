@@ -1,7 +1,7 @@
 import {readFile, access, mkdir, writeFile, appendFile} from 'node:fs/promises';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
-import {inspectPage, inspectSitemap, indexableRoutes, attributes} from './seo-checks.mjs';
+import {inspectPage, inspectSitemap, inspectRobots, indexableRoutes, attributes} from './seo-checks.mjs';
 
 const root = fileURLToPath(new URL('../dist/', import.meta.url));
 const routes = [...indexableRoutes, '/gizlilik/', '/404/'];
@@ -24,7 +24,7 @@ for (const route of routes) {
 }
 const sitemap = inspectSitemap(await readFile(path.join(root, 'sitemap.xml'), 'utf8'));
 const robots = await readFile(path.join(root, 'robots.txt'), 'utf8');
-if (!/User-agent: \*\s+Allow: \/\s+Sitemap: https:\/\/izmirlokmasi\.com\/sitemap.xml/.test(robots)) sitemap.errors.push('Robots discovery/access mismatch');
+sitemap.errors.push(...inspectRobots(robots).errors);
 for (const key of ['title', 'description']) {
   const seen = new Set();
   for (const page of pages.filter(p => indexableRoutes.includes(p.route))) {

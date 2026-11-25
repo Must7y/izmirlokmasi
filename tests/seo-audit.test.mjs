@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile, stat} from 'node:fs/promises';
-import {inspectPage, inspectSitemap} from '../scripts/seo-checks.mjs';
+import {inspectPage, inspectSitemap, inspectRobots} from '../scripts/seo-checks.mjs';
 import {execFileSync} from 'node:child_process';
 
 const html = await readFile(new URL('../dist/hayir-lokmasi/index.html', import.meta.url), 'utf8');
@@ -73,4 +73,17 @@ test('Build revision uses a full SHA and rejects injected revision values',async
   assert.ok(stamp.revision==='unknown' || /^[a-f0-9]{40}$/.test(stamp.revision));
   assert.equal(typeof stamp.dirty,'boolean');
   assert.throws(()=>execFileSync(process.execPath,['scripts/stamp-build.mjs'],{cwd:new URL('../',import.meta.url),env:{...process.env,GITHUB_SHA:'not-a-commit'},stdio:'pipe'}));
+});
+test('A valid WhatsApp URL embedded in an attacker URL does not pass contact verification',()=>{
+  const embedded=html.replaceAll('https://wa.me/905306902501','https://invalid.example/?next=https://wa.me/905306902501');
+  assert.ok(inspectPage(embedded,'/hayir-lokmasi/').errors.includes('Verified WhatsApp contact missing'));
+  const wrongHost=html.replaceAll('https://wa.me/905306902501','https://wa.me.invalid.example/905306902501');
+  assert.ok(inspectPage(wrongHost,'/hayir-lokmasi/').errors.includes('Verified WhatsApp contact missing'));
+});
+test('Sitemap declarations require an exact production URL and allow normal comments',()=>{
+  assert.deepEqual(inspectRobots('User-agent: *\nAllow: /\nSitemap: https://izmirlokmasi.com/sitemap.xml # current\n').errors,[]);
+  for(const url of ['https://invalid.example/?next=https://izmirlokmasi.com/sitemap.xml','https://izmirlokmasi.com/sitemap.xml.invalid','https://izmirlokmasi.com/sitemapXxml']){
+    assert.ok(inspectRobots('Sitemap: '+url).errors.length);
+  }
+  assert.ok(inspectRobots('Sitemap: https://izmirlokmasi.com/sitemap.xml\nDisallow: /').errors.includes('Production crawling blocked'));
 });

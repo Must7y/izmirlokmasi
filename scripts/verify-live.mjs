@@ -1,5 +1,5 @@
 // Read-only production verification: no probing flood; static content only.
-import {inspectPage, inspectSitemap, origin} from './seo-checks.mjs';
+import {inspectPage, inspectSitemap, inspectRobots, origin} from './seo-checks.mjs';
 const base = new URL(process.argv[2] || 'https://izmirlokmasi.com');
 const cloudflareHeaders = process.argv.includes('--cloudflare-headers');
 const revisionIndex=process.argv.indexOf('--expected-revision');
@@ -59,8 +59,7 @@ for(const p of [...routes,...assets,...unknown]){
    if(p.startsWith('/images/') && res.headers.get('cross-origin-resource-policy')==='same-origin')fail(p,'Image preview would be blocked cross-origin');
    if(p==='/robots.txt') {
      const robots=await res.text();
-     if(!/Sitemap:\s*https:\/\/izmirlokmasi\.com\/sitemap.xml/.test(robots))fail(p,'Sitemap declaration missing');
-     if(/Disallow:\s*\/\s*(?:\n|$)/.test(robots))fail(p,'Production crawling blocked');
+     for(const message of inspectRobots(robots).errors)fail(p,message);
    }
    if(p==='/sitemap.xml') for(const message of inspectSitemap(await res.text()).errors)fail(p,message);
    if(failures===before)console.log(`PASS ${p} ${res.status}`);

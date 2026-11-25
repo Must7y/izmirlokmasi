@@ -4,7 +4,28 @@ export const serviceRoutes = ['izmir-lokmasi', 'saray-lokmasi', 'hayir-lokmasi',
 export const indexableRoutes = ['/', ...serviceRoutes.map(route => `/${route}/`), '/iletisim/'];
 export const canonicalFor = route => new URL(route.replace(/\/?$/, '/'), origin).href;
 export const attributes = tag => Object.fromEntries([...tag.matchAll(/([\w:-]+)\s*=\s*(?:"([^"]*)"|'([^']*)')/g)].map(m => [m[1].toLowerCase(), m[2] ?? m[3]]));
-const plain = text => text.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim();
+// Title contents are compared as text, never sanitized for insertion into HTML.
+const normalizeTitle = text => text.replace(/\s+/g, ' ').trim();
+
+export function inspectRobots(text) {
+  const lines=text.split(/\r?\n/).map(line=>line.split('#')[0].trim()).filter(Boolean);
+  const declarations=lines.filter(line=>line.toLowerCase().startsWith('sitemap:')).map(line=>line.slice(line.indexOf(':')+1).trim());
+  const errors=[];
+  if(!declarations.some(url=>url===origin+'/sitemap.xml'))errors.push('Sitemap declaration missing or incorrect');
+  if(lines.some(line=>/^disallow:\s*\/\s*$/i.test(line)))errors.push('Production crawling blocked');
+  return {errors};
+}
+
+function hasVerifiedWhatsApp(html) {
+  return [...html.matchAll(/<a\b[^>]*>/gi)].some(match=>{
+    const href=attributes(match[0]).href;
+    if(!href)return false;
+    try {
+      const url=new URL(href);
+      return url.origin==='https://wa.me' && url.pathname==='/905306902501' && !url.username && !url.password;
+    }catch{return false;}
+  });
+}
 
 export function inspectPage(html, route) {
   const errors = [];
@@ -14,7 +35,7 @@ export function inspectPage(html, route) {
   const descriptions = meta.filter(m => m.name === 'description');
   const canonicals = [...html.matchAll(/<link\b[^>]*>/gi)].map(m => attributes(m[0])).filter(a => a.rel === 'canonical');
   const robots = meta.filter(m => m.name === 'robots');
-  const title = plain(titles[0]?.[1] || '');
+  const title = normalizeTitle(titles[0]?.[1] || '');
   const description = descriptions[0]?.content || '';
   check(titles.length === 1 && title.length > 0, 'Exactly one nonempty title required');
   check(descriptions.length === 1 && description.length > 0, 'Exactly one nonempty description required');
@@ -23,7 +44,7 @@ export function inspectPage(html, route) {
   check(/<html\b[^>]*lang="tr"/i.test(html), 'Turkish document language missing');
   check((html.match(/<h1\b/gi) || []).length === 1, 'Exactly one H1 required');
   check(meta.some(m => m.name === 'viewport' && m.content?.includes('width=device-width')), 'Responsive viewport missing');
-  check(html.includes('https://wa.me/905306902501'), 'Verified WhatsApp contact missing');
+  check(hasVerifiedWhatsApp(html), 'Verified WhatsApp contact missing');
   const noindex = route === '/gizlilik/' || route === '/404/';
   check(noindex ? /\bnoindex\b/.test(robots[0]?.content || '') : !/\bnoindex\b/.test(robots[0]?.content || ''), 'Unexpected indexing policy');
   for (const [property, expected] of [['og:url', canonicalFor(route)], ['og:title', title]]) {

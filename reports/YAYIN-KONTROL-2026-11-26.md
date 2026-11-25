@@ -31,3 +31,9 @@ Kullanıcının son talebi, önceki ve mevcut güncellemelerin uygulanmasını v
 Search Console'un güncel sorgu/konum ve URL Denetimi verileri ile Google Business Profile erişimi kod deposundan üretilemez. Reklam hesabı verisi, bütçe ve dönüşüm tanımı olmadan reklam açılmaz. Kodun taramaya açık olması, indekslenme veya sıralama garantisi değildir. Başlık/sitemap değişimleri yayımlandıktan sonra gerçek sorgu gösterimleriyle izlenmelidir.
 
 Ayrıntılar: [bakım kılavuzu](../operations/README.md), [Google görünürlüğü raporu](SEO-GORUNURLUK-2026-11-26.md), [ilk uygulama raporu](SEO-SECURITY-2026-11-26.md).
+
+## PR güvenlik değerlendirmesi
+
+PR #7'nin ilk CodeQL değerlendirmesi üç yüksek öncelikli bildirim üretti. Konumlar denetim betiklerindeydi: `seo-checks.mjs` içindeki etiket silme düzenli ifadesi ve WhatsApp adresi alt metin kontrolü; `verify-live.mjs` içindeki sitemap adresi düzenli ifadesi. Bu kontrollerin rapor/karşılaştırma çıktısı ürettiği, ziyaretçi girdisini canlı sayfaya HTML olarak basan bir akış olmadığı statik olarak incelendi. Depoda ayrı SECURITY.md bulunmadı; değerlendirme statik mimari ve gerçek çağrı yollarıyla sınırlandı.
+
+Başlık metni artık HTML temizleyici gibi işlenmiyor; yalnız boşluk normalizasyonu yapılıyor. WhatsApp bağlantıları URL nesnesiyle tam origin/path ve kullanıcı bilgisi yokluğu üzerinden doğrulanıyor. Robots sitemap bildirimi satır satır ayrılıp tam üretim URL'siyle eşleştiriliyor. Doğru adresin bir saldırgan adresinin içine gömüldüğü durumlar için iki olumsuz regresyon testi eklendi. Uyarı bastırma, alarm kapatma veya güvenlik sorgusu kaldırma uygulanmadı. Sonuç için yeni CI/CodeQL değerlendirmesi esas alınır.
