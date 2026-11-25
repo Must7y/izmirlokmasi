@@ -1,56 +1,26 @@
-# İzmir Lokmacısı Hanifi Usta – GitHub Pages yayın talimatı
+# GitHub Pages yayın ve geri dönüş
 
-**Kaynak:** Drive'dan alınan v2.8 ZIP'i ve siteyi değiştirmeyen v2.9 güvenlik güncellemesi (değiştirilmemiş yedeği saklıdır). **Hedef:** `https://izmirlokmasi.com`.
+Mevcut depo `Must7y/izmirlokmasi`, hedef `https://izmirlokmasi.com`. Bu kaynak mevcut kurulumu kullanır; yeni depo, alan adı veya DNS kurulumu gerekmez.
 
-## GitHub tarafı
+## Yayın sırası
 
-1. `https://github.com/new` adresinde `Must7y` hesabından `izmirlokmasi` isimli **Public** depo açın; README/.gitignore/license eklemeden boş bırakın. (Ücretsiz GitHub Pages, public depo ile çalışır.)
-2. Bu paketteki `izmirlokmasi/` klasörünün **içindeki** kaynakları depo köküne yükleyin. ZIP'i dosya olarak yüklemek siteyi açmaz. Alternatif olarak depo açıldıktan sonra bağlı GitHub aracıyla dosyalar gönderilebilir.
-3. `Settings > Pages > Build and deployment > Source` menüsünde `GitHub Actions` seçin.
-4. `.github/workflows/github-pages.yml` ana dala gönderimlerde `npm ci`, kaynak testleri, gerçek Astro build, statik site testleri ve `npm audit --omit=dev` çalıştırır. Her biri başarılıysa `dist/` yayınlanır. `Actions` ekranında başarı durumunu kontrol edin.
-5. `Settings > Pages > Custom domain` alanına `izmirlokmasi.com` girip kaydedin. Paketteki `public/CNAME` aynı alan adını belirtir; DNS kayıtları tam doğrulanmadan eski yayını silmeyin.
+1. Son `main` değişikliklerini al; ayrı dalda düzenlemeleri ve kapsamını incele.
+2. `npm ci`, `npm test`, `npm run audit:full` çalıştır.
+3. Mobil/tablet/masaüstünde sayfaları, Türkçe başlıkları, resimleri, FAQ ve galeri etkileşimini, WhatsApp/telefon/e-posta adreslerini kontrol et. Bağlantıyı doğrulamak için gerçek mesaj veya arama gönderme.
+4. PR kontrollerini incele; başarısız testi atlama veya korumayı kaldırma.
+5. Yetkilendirilmiş PR'ı birleştir. `github-pages` işinin derleme, dağıtım ve `verify-production` adımlarının sonucunu kontrol et.
+6. `npm run verify:live -- https://izmirlokmasi.com --expected-revision <yayınlanan-tam-commit>` çalıştır. Sürüm doğrulaması temiz kaynak commit'i ile eşleşmelidir. CDN eski içerik sunarsa yeni kaynak göndermeden önce dağıtımı ve önbellek yayılımını kontrol et.
+7. HTTP/www yönlendirmesi, geçerli HTTPS, altı indekslenebilir URL ve gerçek 404 davranışını kontrol et.
+8. Son kaynak ve derlenmiş dosyaları, rapor ve bütünlük manifestiyle Drive'daki İzmir Lokmacısı klasörüne yeni arşiv olarak kaydet. Eski yedeğin üzerine yazma.
 
-## DNS (alan adı sağlayıcısında)
+## Arama motoru kontrolü
 
-GitHub Pages özel alan adı kaydedilip doğrulandıktan sonra, mevcut A/AAAA/ALIAS kayıtlarını çatıştırmadan aşağıdaki **dört A** kaydıyla güncelleyin:
+Canonical ve sitemap aynı HTTPS adreslerini ve sondaki `/` biçimini kullanır. Gizlilik ve 404 sayfaları noindex'tir. Robots taramaya açıktır. Bu ayarlar Google'ın sayfayı dizine aldığını veya sıralamada yükselttiğini kanıtlamaz; URL Denetimi ve Performans raporları ayrı kontrol edilir. Ayrıntılar güncel SEO raporundadır.
 
-| Tür | Ad/Host | Değer |
-|---|---|---|
-| A | @ | 185.199.108.153 |
-| A | @ | 185.199.109.153 |
-| A | @ | 185.199.110.153 |
-| A | @ | 185.199.111.153 |
+## Güvenlik
 
-`www` için `CNAME` → `must7y.github.io` (www. ön eki DNS sağlayıcısında genelde otomatik eklenir). GitHub Pages, doğru kurulumla `www` → kök alan adı yönlendirmesi yapabilir. Mevcut e-posta MX/TXT kayıtlarını **silme**; DNS değişimini eski hizmet çalışırken başlatma, önce GitHub dağıtımını test et. GitHub Pages'in alan adı doğrulama TXT kaydını hesabın verdiği gerçek değerle ekle; değer uydurma.
+Gerektiğinde Pages ayarları depoda `Settings > Pages` üzerinden doğrulanır. CNAME ve kaynak dosyaları tek başına DNS/SSL kurulumu değildir. Mevcut MX/TXT kayıtlarını silme. `public/_headers` GitHub Pages'te uygulanmaz; `--cloudflare-headers` modu yalnız o başlıkların gerçekten etkin olduğu ortamda kullanılmalıdır.
 
-## Yayın sonrası kontrol
+## Geri dönüş
 
-- `https://izmirlokmasi.com` ve `https://www.izmirlokmasi.com`: SSL / HTTPS, ana sayfa ve yönlendirme.
-- `/izmir-lokmasi`, `/saray-lokmasi`, `/hayir-lokmasi`, `/mevlit-lokmasi`, `/iletisim`, `/gizlilik`, `/sitemap.xml`, `/robots.txt`, olmayan sayfalarda 404.
-- Lokma fotoğrafları, menü, iki ürün, WhatsApp tıklaması, telefon bağlantısı; iOS/Android ve masaüstü.
-- Arama motoru canonical ve sitemap URL'lerini kontrol et, Search Console'da yeni URL'leri doğrula.
-- `npm run verify:live -- https://izmirlokmasi.com` testini geçiş sonrasında çalıştır; geçmiş Cloudflare başlık testleri GitHub Pages'te birebir geçmeyebilir.
-
-## Güvenlik ve sınırlar
-
-GitHub Pages statik HTML sunar. `public/_headers` Cloudflare Pages'e özgüdür; GitHub Pages bu kuralları uygulamaz. Bu yüzden CSP, X-Frame-Options, Cache-Control ve diğer yanıt başlıkları ayrı test edilmelidir. GitHub'ın kendi HTTPS özelliği etkinleştirilmeli, DNS'te güvenli alan adı doğrulaması yapılmalıdır. İstenen güvenlik başlıkları için Cloudflare üzerinden proxy ve header kuralı ayrı yönetilebilir.
-
-**Henüz yapılmamış doğrulamalar:** Node sürümü ve çevrimdışı npm registry kısıtı nedeniyle burada `npm ci`, gerçek Astro build, canlı HTTP ve tarayıcı kontrolü çalıştırılamadı. Bunları GitHub Actions yayından önce denetler. Domain DNS'i veya GitHub Pages ayarları bu ZIP oluşturulurken değiştirilmedi.
-
-*Kaynak: GitHub Pages ve Astro resmî belgeleri (Kasım 2026):*
-- https://docs.astro.build/en/guides/deploy/github/
-- https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site
-- https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/managing-a-custom-domain-for-your-github-pages-site
-
-## v2.9 otomatik kontroller ve ajansal olmayan bakim
-
-- `.github/workflows/quality.yml`: her degisiklikte kaynak testleri, yapim, npm audit; sadece okuma yetkisi.
-- `.github/workflows/github-pages.yml`: test ve audit basariliysa Pages yayini.
-- `.github/dependabot.yml`: npm ve GitHub Actions icin guncelleme PR teklifleri; otomatik birlestirme yok.
-- `.github/workflows/codeql.yml`: JavaScript/TypeScript icin CodeQL security-extended taramasi; GitHub public depoda kod tarama alarmlarini olusturur. Botun sadece guvenlik bulgularini yuklemek icin `security-events: write` yetkisi vardir.
-- `.github/workflows/site-health.yml`: pazartesi sabah UTC 06:23'te HTTPS, ana sayfa, urun/hizmet sayfalari, sitemap ve hassas dosya yollarini kontrol eder. Basarisizlik `Actions` uzerinden gorulur. Yayindan once alan adi bos olacaksa gecici basarisizlik beklenir.
-- `scripts/verify-live.mjs`: GitHub Pages modunda meta CSP ile HTTPS, link ve 404 kontrolu yapar; `--cloudflare-headers` yazilirsa onceki sunucu HTTP guvenlik basliklari da zorunlu olur.
-- Cloudflare header dosyasi GitHub Pages'te etkin degildir. Meta CSP tek basina iframe/HTML guvenlik basliklarini veya sunucu WAF'ini saglamaz.
-- Yorum, forum, form yoktur. Sonradan eklenirse spam korumasi yalniz istemci JavaScript'i ile kurulamaz.
-
-Diger repo ve guvenlik araci eklerken kaynak, lisans ve bagimlilik riskini goz onunde bulundurun: AstroWind baslik bileseni MIT bildirimi korunur. Mevcut galerinin yerini almak icin ilave carousel paketi ve farkli bot kurmayin.
+Başarılı önceki yayın commit'i ve arşiv, yayın raporunda kayıtlı tutulur. Hatalı değişiklik için geri alma PR'ı aç ve aynı kontrollerden geçir. `git push --force`, koruma kaldırma veya doğrulanmamış eski yedeği doğrudan yayınlama. Drive arşivindeki `source/` düzenlenebilir kaynaktır; `dist/` ise o commit'in üretilmiş statik çıktısıdır.

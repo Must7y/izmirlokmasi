@@ -1,23 +1,24 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import {services,whatsapp} from '../data/site';
+import {Image} from 'astro:assets';
+import izmirPhoto from '../../public/images/lokma-real-appetizing.webp';
+import sarayPhoto from '../../public/images/saray-lokmasi-photo.webp';
+import {services,whatsapp,serviceDetails} from '../data/site';
 export function getStaticPaths(){return services.map(service=>({params:{service:service.slug},props:{service}}))}
 const {service}=Astro.props;
-const titles = {
-  'izmir-lokmasi': 'İzmir Lokması | Yerinde Lokma Dökümü',
-  'saray-lokmasi': 'Saray Lokması | Yerinde Lokma İkramı',
-  'hayir-lokmasi': 'Hayır Lokması Dökümü',
-  'mevlit-lokmasi': 'Mevlit İçin Lokma Dökümü',
-};
-const photo=service.slug==='saray-lokmasi'?'/images/saray-lokmasi-photo.webp':'/images/lokma-real-appetizing.webp';
+const details=serviceDetails[service.slug as keyof typeof serviceDetails];
+const photo=service.slug==='saray-lokmasi'?sarayPhoto:izmirPhoto;
 const photoAlt=service.slug==='saray-lokmasi'?'Şerbetli yuvarlak saray lokması':'Şerbetli halka İzmir lokması';
 ---
-<Layout title={(titles[service.slug as keyof typeof titles] ?? service.name) + ' · Hanifi Usta'} description={service.body}>
+<Layout title={details.title + ' · Hanifi Usta'} description={details.description} service={service}>
   <main id="main">
     <section class="service-hero section">
-      <div><a class="text-link" href="/">← Ana sayfa</a><p class="eyebrow">{service.tag}</p><h1>{service.name}</h1><p>{service.body}</p><a class="button" href={whatsapp} target="_top">Bilgi ve fiyat alın ↗</a></div>
-      <img src={photo} alt={photoAlt} width={1280} height={960} loading="eager" decoding="async"/>
+      <div><a class="text-link" href="/">← Ana sayfa</a><p class="eyebrow">{service.tag}</p><h1>{details.heading}</h1><p>{service.body}</p><a class="button" href={whatsapp} target="_top">Bilgi ve fiyat alın ↗</a></div>
+      <Image src={photo} widths={[480,768,1024,1280]} sizes="(max-width: 800px) 88vw, 42vw" format="webp" alt={photoAlt} width={1280} height={960} loading="eager" fetchpriority="high" decoding="async"/>
     </section>
-    <section class="section service-info"><h2>Siparişi birlikte planlayalım.</h2><p>Tarih, adres, kişi sayısı ve tercih ettiğiniz lokma türünü iletin. Müsaitlik, hazırlık koşulları ve güncel fiyatı görüşelim.</p><div class="related">{services.filter(s=>s.slug!==service.slug).map(s=><a href={'/'+s.slug}>{s.name} ↗</a>)}</div></section>
+    <section class="section service-info"><h2>{details.planningTitle}</h2><p>{details.planning}</p>
+      {details.questions.map(([question,answer])=><div><h3>{question}</h3><p>{answer}</p></div>)}
+      <div class="related"><a href="/iletisim/">Lokma dökümü için iletişim ↗</a>{services.filter(s=>s.slug!==service.slug).map(s=><a href={'/'+s.slug+'/'}>{s.name} ↗</a>)}</div>
+    </section>
   </main>
 </Layout>

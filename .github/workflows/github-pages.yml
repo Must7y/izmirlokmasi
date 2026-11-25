@@ -31,9 +31,9 @@ jobs:
       - name: Gercek Astro derlemesi, rota ve dosya testleri
         run: npm run test:build
       - name: Uretim bagimliliklarini guvenlik acisindan tara
-        run: npm run audit:deps
+        run: npm run audit:full
       - name: Pages yapitini yukle
-        uses: actions/upload-pages-artifact@v5
+        uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5
         with:
           path: ./dist
 
@@ -51,4 +51,18 @@ jobs:
     steps:
       - name: GitHub Pages uzerinde yayinla
         id: deployment
-        uses: actions/deploy-pages@v5
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5
+
+  verify-production:
+    needs: deploy
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: '22.23.4'
+      - name: Yayinlanan commit ve canli SEO kurallarini dogrula
+        env:
+          EXPECTED_REVISION: ${{ github.sha }}
+        run: node scripts/verify-live.mjs https://izmirlokmasi.com --expected-revision "$EXPECTED_REVISION"

@@ -6,7 +6,7 @@ test('altbilgi sade, menü kaldırıldı, gizlilik ve hizmet sayfaları korundu'
  const layout=await read('src/layouts/Layout.astro');
  assert.match(layout,/footer-minimal/);
  assert.doesNotMatch(layout,/footer-links|desktop-nav|mobile-nav/);
- assert.match(layout,/href="\/gizlilik"/);
+ assert.match(layout,/href="\/gizlilik\/"/);
  assert.match(layout,/src="\/icons\/whatsapp.svg"/);
  for(const page of ['src/pages/[service].astro','src/pages/iletisim.astro','src/pages/gizlilik.astro'])assert.ok((await read(page)).length>100);
 });
@@ -33,6 +33,7 @@ test('hizmet alanı sınırlanmıyor ve doğrulanmamış ülke-geneli vaadi yok'
  const all=sources.join('\n');
  assert.doesNotMatch(all,/İstanbul genelinde|İstanbul['’]da|İstanbul['’un]|İstanbul['’daki]|areaServed|Türkiye genelinde|81 ilde/i);
  assert.match(all,/Hangi bölgelerde hizmet veriyorsunuz\?/);
- assert.match(all,/hizmet uygunluğunu birlikte teyit edelim/);
+ assert.match(all,/Organizasyonun tarihini ve konumunu paylaşın/);
+ assert.match(all,/uygunluğu birlikte kontrol edelim|hizmet uygunluğunu birlikte teyit edelim/);
  assert.match(all,/HAYIR • MEVLİT • ÖZEL GÜN LOKMASI/);
 });

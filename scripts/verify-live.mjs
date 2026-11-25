@@ -1,7 +1,12 @@
 // Read-only production verification: no probing flood; static content only.
+import {inspectPage, inspectSitemap, origin} from './seo-checks.mjs';
 const base = new URL(process.argv[2] || 'https://izmirlokmasi.com');
 const cloudflareHeaders = process.argv.includes('--cloudflare-headers');
+const revisionIndex=process.argv.indexOf('--expected-revision');
+const expectedRevision=revisionIndex===-1?null:process.argv[revisionIndex+1];
+if (revisionIndex!==-1 && !/^[a-f0-9]{40}$/.test(expectedRevision||'')) throw new Error('Expected revision must be a full commit SHA');
 if (base.protocol !== 'https:' || !base.hostname) throw new Error('Verified HTTPS host is required');
+if (base.origin !== origin || base.username || base.password || base.pathname !== '/' || base.search || base.hash) throw new Error('Only the configured production origin can be verified');
 const routes = ['/', '/izmir-lokmasi', '/saray-lokmasi','/hayir-lokmasi','/mevlit-lokmasi','/iletisim','/gizlilik'];
 const assets = ['/robots.txt','/sitemap.xml','/js/site.js','/images/lokma-real-appetizing.webp','/favicon.svg'];
 const unknown = ['/__izmir_missing_check_2026__','/.env','/.git/config','/package.json'];
@@ -15,6 +20,7 @@ async function get(path){
  return response;
 }
 for(const p of [...routes,...assets,...unknown]){
+ const before=failures;
  try {
    const res=await get(p);
    const notFound=unknown.includes(p);
@@ -35,6 +41,7 @@ for(const p of [...routes,...assets,...unknown]){
        if(res.headers.get('x-frame-options')!=='DENY')fail(p,'Frame protection absent');
      }
      const html=await res.text();
+     for (const message of inspectPage(html,p.replace(/\/?$/, '/')).errors) fail(p,message);
      if (!cloudflareHeaders && !/http-equiv=["']Content-Security-Policy["']/i.test(html)) fail(p,'GitHub Pages CSP meta absent');
      if(/<style\b|<script\b(?![^>]*src=)(?![^>]*type=["']application\/ld\+json)/i.test(html)) fail(p,'Inline executable script/style under strict CSP');
      if(p==='/') {
@@ -50,8 +57,25 @@ for(const p of [...routes,...assets,...unknown]){
      if(cloudflareHeaders && res.headers.get('cross-origin-resource-policy')!=='same-origin')warn(p,'JS CORP policy missing');
    }
    if(p.startsWith('/images/') && res.headers.get('cross-origin-resource-policy')==='same-origin')fail(p,'Image preview would be blocked cross-origin');
-   console.log(`PASS ${p} ${res.status}`);
+   if(p==='/robots.txt') {
+     const robots=await res.text();
+     if(!/Sitemap:\s*https:\/\/izmirlokmasi\.com\/sitemap.xml/.test(robots))fail(p,'Sitemap declaration missing');
+     if(/Disallow:\s*\/\s*(?:\n|$)/.test(robots))fail(p,'Production crawling blocked');
+   }
+   if(p==='/sitemap.xml') for(const message of inspectSitemap(await res.text()).errors)fail(p,message);
+   if(failures===before)console.log(`PASS ${p} ${res.status}`);
  }catch(e){fail(p,`unreachable: ${e.message}`)}
+}
+if(expectedRevision){
+ try {
+   const res=await get('/build-info.json');
+   if(res.status!==200)fail('/build-info.json',`HTTP ${res.status}; published revision not verified`);
+   else {
+     const build=await res.json();
+     if(build.revision!==expectedRevision || build.dirty!==false)fail('/build-info.json','Published revision differs from the clean requested commit');
+     else console.log(`PASS published revision ${expectedRevision}`);
+   }
+ }catch(e){fail('/build-info.json',`Revision check failed: ${e.message}`)}
 }
 console.log(`Verification result: ${failures} failures; ${warnings} warnings`);
 if(failures)process.exitCode=1;

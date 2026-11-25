@@ -5,7 +5,7 @@ export default defineConfig({
   output: 'static',
   // The strict CSP bans inline CSS; force all styles to external assets.
   build: { inlineStylesheets: 'never' },
-  trailingSlash: 'never',
+  trailingSlash: 'always',
   vite: {
     build: { assetsInlineLimit: 0 },
   },

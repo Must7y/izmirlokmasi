@@ -27,7 +27,7 @@ test('workflow is deliberately read-only, with no automatic deploy or unverified
   assert.match(file,/permissions:\s*\n\s*contents:\s*read/);
   assert.doesNotMatch(file,/permissions:\s*write|secrets\.|deploy-pages|pages:\s*write|pull-requests:\s*write/i);
   assert.match(file,/npm ci/);
-  assert.match(file,/audit:deps/);
+  assert.match(file,/audit:full/);
   const dependabot=await text('.github/dependabot.yml');
   assert.match(dependabot,/open-pull-requests-limit:\s*2/);
   assert.doesNotMatch(dependabot,/automerge|auto-merge/i);
