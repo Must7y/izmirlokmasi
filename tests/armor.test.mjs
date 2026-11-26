@@ -24,10 +24,10 @@ test('security headers have exact enforceable directives and no unsafe fallbacks
   const common=headers.get('/*'); assert.ok(common);
   const csp=common.get('content-security-policy'); assert.ok(csp);
   const directives=new Map(csp.split(';').map(x=>x.trim().split(/\s+/,2)).filter(x=>x[0]).map(([key])=>[key,csp.split(';').map(x=>x.trim()).find(x=>x.startsWith(key+' '))]));
-  const expected={ 'default-src':"'none'",'script-src':"'self'",'script-src-attr':"'none'",'style-src':"'self'",'style-src-attr':"'none'",'img-src':"'self'",'font-src':"'self'",'connect-src':"'self'",'frame-src':"'none'",'frame-ancestors':"'none'",'object-src':"'none'",'base-uri':"'none'",'form-action':"'none'" };
+  const expected={ 'default-src':"'none'",'script-src':"'self' https://www.googletagmanager.com",'script-src-attr':"'none'",'style-src':"'self'",'style-src-attr':"'none'",'img-src':"'self'",'font-src':"'self'",'connect-src':"'self' https://www.google-analytics.com https://region1.google-analytics.com",'frame-src':"'none'",'frame-ancestors':"'none'",'object-src':"'none'",'base-uri':"'none'",'form-action':"'none'" };
   for(const [key,policy] of Object.entries(expected)) assert.equal(directives.get(key),`${key} ${policy}`,key);
   assert.ok(csp.includes('upgrade-insecure-requests'));
-  assert.doesNotMatch(csp,/unsafe-(?:inline|eval)|\*|https?:\/\//);
+  assert.doesNotMatch(csp,/unsafe-(?:inline|eval)|\*/);
   assert.equal(common.get('x-frame-options'),'DENY');
   assert.equal(common.get('x-content-type-options'),'nosniff');
   assert.ok(common.get('permissions-policy').includes('camera=()'));

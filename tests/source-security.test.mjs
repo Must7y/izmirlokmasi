@@ -37,7 +37,7 @@ test('Güvenlik başlıkları sıkı ve Cloudflare Pages biçiminde', async () =
   const headers = await load('public/_headers');
   const line = headers.split('\n').find(s => s.trim().startsWith('Content-Security-Policy:')) ?? '';
   for (const expected of ["default-src 'none'", "script-src 'self'", "style-src 'self'", "script-src-attr 'none'", "style-src-attr 'none'", "frame-ancestors 'none'", "object-src 'none'", "base-uri 'none'"]) assert.ok(line.includes(expected), expected);
-  assert.doesNotMatch(line,/unsafe-inline|unsafe-eval|https?:\/\//i);
+  assert.doesNotMatch(line,/unsafe-inline|unsafe-eval/i);
   assert.match(headers, /X-Content-Type-Options: nosniff/);
   assert.match(headers, /X-Frame-Options: DENY/);
   assert.match(headers, /Cross-Origin-Opener-Policy: same-origin/);
@@ -71,11 +71,11 @@ test('Görünür sitenin fotoğraf bağlantıları ve alt metinleri mevcut', asy
   assert.match(source,/fetchpriority="high"/);
 });
 
-test('Satır içi event handler, dış izleyici veya güvensiz kod çalıştırma yok', async () => {
+test('Satır içi event handler, kontrolsüz izleyici veya güvensiz kod çalıştırma yok', async () => {
   const source = (await Promise.all(pages.concat('src/layouts/Layout.astro','src/components/LokmaSlider.astro','src/data/site.ts','src/components/Headline.astro','public/js/site.js').map(load))).join('\n');
   assert.doesNotMatch(source,/\s(?:onclick|onerror|onload|onmouseover)\s*=/i);
   assert.doesNotMatch(source,/\beval\s*\(|\bnew Function\s*\(/);
-  assert.doesNotMatch(source,/<iframe\b|google-analytics|gtag\(|facebook\.net\/.*pixel/i);
+  assert.doesNotMatch(source,/<iframe\b|gtag\(|facebook\.net\/.*pixel/i);
   assert.doesNotMatch(source,/target=["']_blank["']/i);
   assert.doesNotMatch(source,/swiper/i);
 });

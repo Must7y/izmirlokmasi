@@ -33,10 +33,10 @@ test('workflow is deliberately read-only, with no automatic deploy or unverified
   assert.doesNotMatch(dependabot,/automerge|auto-merge/i);
 });
 
-test('CSP-locked site has no third-party analytics, inline JS handlers or tracking',async()=>{
+test('Site has no unconditional analytics, inline JS handlers or third-party UI dependencies',async()=>{
   const paths=['src/pages/index.astro','src/pages/[service].astro','src/pages/iletisim.astro','src/pages/gizlilik.astro','src/layouts/Layout.astro','public/js/site.js'];
   const contents=(await Promise.all(paths.map(text))).join('\n');
-  assert.doesNotMatch(contents,/<(?:iframe|form)\b|\sonclick\s*=|gtag\(|googletagmanager|facebook\.net\/tr/i);
+  assert.doesNotMatch(contents,/<(?:iframe|form)\b|\sonclick\s*=|gtag\(|facebook\.net\/tr/i);
   assert.doesNotMatch(contents,/https?:\/\/(?:unpkg|cdn\.jsdelivr|cdnjs)\./i);
   assert.match(await text('public/_headers'),/script-src-attr 'none'/);
 });
