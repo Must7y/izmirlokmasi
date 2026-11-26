@@ -1,3 +1,5 @@
+Güncel Google hesap/ölçüm kaydı: [26 Kasım](../reports/GOOGLE-KURULUM-2026-11-26.md).
+
 # Hanifi Usta bakım düzeni
 
 Güncel: [Google görünürlüğü ve ikinci uygulama turu](../reports/SEO-GORUNURLUK-2026-11-26.md).

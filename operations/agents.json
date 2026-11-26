@@ -55,7 +55,7 @@
       "command": "npm run test:source && npm run audit:full",
       "checks": [
         "CSP",
-        "no tracking",
+        "analytics gated by visitor choice",
         "bundle leakage",
         "locked dependencies",
         "workflow permissions"
