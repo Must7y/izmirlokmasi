@@ -19,6 +19,7 @@ export const serviceDetails = {
     questions: [
       ['İzmir lokması ile saray lokması aynı mı?', 'İzmir lokması halka, saray lokması küçük ve yuvarlak biçimindedir. Hangi lokmayı istediğinizi teklif alırken belirtebilirsiniz.'],
       ['Lokma döktürme fiyatını nasıl öğrenebilirim?', 'Tarih, organizasyon adresi, kişi sayısı ve lokma tercihinizi iletin. Güncel teklif, hazırlık ve servis koşulları görüşüldükten sonra netleşir.'],
+      ['300 veya 500 kişilik lokma fiyatını nasıl öğrenebilirim?', 'Planladığınız kişi sayısını, tarihi ve İstanbul’daki organizasyon konumunu iletin. İkram miktarını, servis kapsamını ve o gün için uygunluğu birlikte teyit ederek güncel teklif isteyin.'],
       ['Lokma siparişi internetten kesinleşiyor mu?', 'Sitedeki bağlantı WhatsApp görüşmesini açar. Mesaj göndermek siparişin kesinleştiği anlamına gelmez; müsaitlik, teklif ve servis planını Hanifi Usta ile teyit edin.'],
     ],
   },

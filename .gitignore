@@ -42,3 +42,12 @@ next-env.d.ts
 /work/
 # Astro generated state
 .astro/
+
+# Private business reports and research
+/reports/
+/private-review/
+/operations/CONTINUE.md
+/operations/ads-plan.md
+/operations/keyword-map.json
+/operations/sources.json
+/operations/agents.json

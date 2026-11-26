@@ -33,17 +33,3 @@ jobs:
         run: npm run check:bundle
       - name: Dependency vulnerability audit (fail on moderate or worse)
         run: npm run audit:full
-      - name: Save page-level SEO evidence
-        if: always()
-        shell: bash
-        run: |
-          mkdir -p outputs/maintenance
-          npm run audit:site -- --output outputs/maintenance 2>&1 | tee outputs/maintenance/seo.log
-      - name: Retain audit evidence
-        if: always()
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
-        with:
-          name: seo-maintenance-${{ github.run_id }}
-          path: outputs/maintenance/
-          retention-days: 30
-          if-no-files-found: error
