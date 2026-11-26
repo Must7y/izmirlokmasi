@@ -15,7 +15,7 @@ const facebookShareUrl = 'https://www.facebook.com/share/1E5EyhL6fV/';
 const schema={
   '@context':'https://schema.org',
   '@graph':[
-    {'@type':'Organization','@id':homepage+'/#organization',name:'İzmir Lokmacısı Hanifi Usta',url:homepage,logo:homepage+'/images/hanifi-logo-vector-integrated.webp',telephone:'+905306902501',email:'izmirlokmacisi@gmail.com',contactPoint:{'@type':'ContactPoint',telephone:'+905306902501',contactType:'customer service',availableLanguage:'Turkish'},sameAs:socialProfiles.map(profile => profile.url)},
+    {'@type':'Organization','@id':homepage+'/#organization',name:'İzmir Lokmacısı Hanifi Usta',url:homepage,logo:homepage+'/images/hanifi-logo-vector-integrated.webp',telephone:'+905306902501',email:'izmirlokmasii@gmail.com',contactPoint:{'@type':'ContactPoint',telephone:'+905306902501',contactType:'customer service',availableLanguage:'Turkish'},sameAs:socialProfiles.map(profile => profile.url)},
     {'@type':'WebSite','@id':homepage+'/#website',url:homepage,name:'Hanifi Usta · Meşhur İzmir Lokmacısı',alternateName:'İzmir Lokmacısı Hanifi Usta',inLanguage:'tr-TR',publisher:{'@id':homepage+'/#organization'}},
     ...(!noindex ? [{
       '@type':Astro.url.pathname.replace(/\/$/,'')==='/iletisim'?'ContactPage':'WebPage',
