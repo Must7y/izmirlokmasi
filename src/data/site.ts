@@ -1,4 +1,9 @@
-export const whatsapp='https://wa.me/905306902501?text=Merhaba%20Hanifi%20Usta%2C%20lokma%20hizmeti%20i%C3%A7in%20bilgi%20almak%20istiyorum.';
+export function whatsappForService(serviceName?: string) {
+  const subject = serviceName ? `${serviceName} için` : 'lokma hizmeti için';
+  const message = `Merhaba Hanifi Usta, ${subject} bilgi ve teklif almak istiyorum.\nTarih:\nKonum (il/ilçe):\nYaklaşık kişi sayısı:\nİkrama başlama saati:`;
+  return `https://wa.me/905306902501?text=${encodeURIComponent(message)}`;
+}
+export const whatsapp=whatsappForService();
 export const services=[
 {slug:'izmir-lokmasi',name:'İzmir lokması',tag:'Bildiğiniz halka lokma',body:'Ortası delik halka lokma, şerbetiyle buluşup ikrama hazır olur. Hayır, mevlit ve özel günlerde tercih edebilirsiniz. Hazırlık ve servis koşullarını organizasyon yerine göre birlikte netleştiriyoruz.'},
 {slug:'saray-lokmasi',name:'Saray lokması',tag:'Küçük, yuvarlak lokmalar',body:'Saray lokması küçük ve yuvarlak hazırlanır. Halka lokmaya alternatif arayanlar için. Kişi sayısı, tarih ve adres bilgisiyle organizasyonunuza uygun ikramı planlayabiliriz.'},
