@@ -45,3 +45,5 @@
 }
 
 @media(max-width:680px){.header .button-header{display:none!important}}
+
+.social-link{display:inline-flex;align-items:center;gap:6px}.social-icon{display:inline-block;flex:0 0 14px}
