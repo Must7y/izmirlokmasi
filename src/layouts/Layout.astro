@@ -1,6 +1,7 @@
 ---
 import '../styles/site.css';
 import {whatsapp} from '../data/site';
+import SocialIcon from '../components/SocialIcon.astro';
 const {title='İzmir Lokması ve Yerinde Lokma Dökümü | Hanifi Usta',description='İstanbul ve çevre illerde hayır, mevlit ve özel günler için yerinde İzmir lokması ve saray lokması döküyoruz. Tarih ve konumunuzu paylaşarak teklif alın.',noindex=false,service}=Astro.props;
 const canonical=new URL(Astro.url.pathname.replace(/\/?$/, '/'), Astro.site);
 const homepage='https://izmirlokmasi.com';
@@ -76,8 +77,8 @@ const schema={
 </header>
 <slot/>
 <footer class="footer footer-minimal"><div class="footer-identity"><a class="footer-word" href="/">Hanifi Usta</a><span>Lokmanın en güzel yanı, paylaşılması.</span></div><div class="footer-meta"><span>© {new Date().getFullYear()} Hanifi Usta</span><a href="/gizlilik/">Gizlilik ve görsel bilgileri</a>
-  {socialProfiles.map(profile => <a href={profile.url}>{profile.name}</a>)}
-  <a href={facebookShareUrl}>Facebook</a></div></footer>
+  {socialProfiles.map(profile => <a class="social-link" href={profile.url}><SocialIcon name={profile.name}/>{profile.name}</a>)}
+  <a class="social-link" href={facebookShareUrl}><SocialIcon name="Facebook"/>Facebook</a></div></footer>
 <a class="floating-wa" href={whatsapp} target="_top" aria-label="Hanifi Usta’ya WhatsApp’tan yazın"><img class="wa-icon" src="/icons/whatsapp.svg" alt="" width="21" height="21"/><span>WhatsApp’tan yazın</span><span aria-hidden="true">↗</span></a>
 <script is:inline src="/js/site.js" defer></script>
 </body></html>
