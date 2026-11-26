@@ -1,0 +1,186 @@
+{
+  "scope": "Homepage normal HTTP client observation, not Googlebot, rank or Core Web Vitals measurement. sitemap.xml failure does not prove absence of another sitemap URL.",
+  "sites": [
+    {
+      "requested_url": "https://www.izmirlokma.com/",
+      "observed_at": "2026-11-26",
+      "http_status": 200,
+      "final_url": "https://www.izmirlokma.com/",
+      "title": "İzmir Lokma - Lokmacı - Lokma Fiyatları - İzmir Lokmacı",
+      "h1": [
+        "İzmir Lokma"
+      ],
+      "description": "İzmir lokma 1993 yılından bugüne dek lokmacı, İzmir lokma fiyatları ve İzmir lokmacı arayışlarınız için hizmetinizdedir. İzmir lokma döktürme için doğru adres.",
+      "robots_meta": null,
+      "canonical": [],
+      "html_lang": "tr",
+      "jsonld_block_count": 0,
+      "image_count": 18,
+      "images_missing_alt_attribute": 0,
+      "http_security_headers": {},
+      "/robots.txt": {
+        "status": null,
+        "final_url": null,
+        "error": "HTTP Error 404: Not Found"
+      },
+      "/sitemap.xml": {
+        "status": 200,
+        "final_url": "https://www.izmirlokma.com/sitemap.xml",
+        "error": null
+      }
+    },
+    {
+      "requested_url": "https://www.carsilokmacisi.com/",
+      "observed_at": "2026-11-26",
+      "http_status": 200,
+      "final_url": "https://www.carsilokmacisi.com/",
+      "title": "Ana Sayfa - Meşhur Çarşı Lokmacısı Erdoğan Usta",
+      "h1": [],
+      "description": "Yarım asıra dayanan lezet1978 yılında, İzmir’in kalbi Kemeraltı’nda küçük bir kazanla başlayan bu yolculuk, bugün binlerce insanın hafızasında yer eden bir",
+      "robots_meta": "index, follow, max-snippet:-1, max-video-preview:-1, max-image-preview:large",
+      "canonical": [
+        "https://www.carsilokmacisi.com/"
+      ],
+      "html_lang": "tr",
+      "jsonld_block_count": 1,
+      "image_count": 33,
+      "images_missing_alt_attribute": 1,
+      "http_security_headers": {},
+      "/robots.txt": {
+        "status": 200,
+        "final_url": "https://www.carsilokmacisi.com/robots.txt",
+        "error": null,
+        "body": "User-agent: *\nDisallow: /wp-admin/\nAllow: /wp-admin/admin-ajax.php\n\nSitemap: https://www.carsilokmacisi.com/sitemap_index.xml\n\nUser-agent: *\nDisallow: /imunify-bot-check\n"
+      },
+      "/sitemap.xml": {
+        "status": 200,
+        "final_url": "https://www.carsilokmacisi.com/sitemap_index.xml",
+        "error": null
+      }
+    },
+    {
+      "requested_url": "https://hayrathayirlokmasi.com.tr/",
+      "observed_at": "2026-11-26",
+      "http_status": 200,
+      "final_url": "https://hayrathayirlokmasi.com.tr/",
+      "title": "Hayır Lokması - İstanbul Lokma Döktürme - İstanbul Lokmacı",
+      "h1": [
+        "İstanbul Hayır Lokması \nLokmacı & Lokma Döktürme"
+      ],
+      "description": "Hayır Lokması olarak İstanbul’un tüm ilçelerine Hayır Lokması döküyoruz. İstanbul Hayır Lokması, Lokma Döktürme Fiyatları, Lokmacı için 0546 110 35 35.",
+      "robots_meta": "max-snippet:-1, max-image-preview:large, max-video-preview:-1",
+      "canonical": [
+        "https://hayrathayirlokmasi.com.tr/"
+      ],
+      "html_lang": "tr",
+      "jsonld_block_count": 9,
+      "image_count": 42,
+      "images_missing_alt_attribute": 0,
+      "http_security_headers": {},
+      "/robots.txt": {
+        "status": 200,
+        "final_url": "https://hayrathayirlokmasi.com.tr/robots.txt",
+        "error": null,
+        "body": "User-agent: *\r\nDisallow: /wp-admin/\r\nAllow: /wp-admin/admin-ajax.php\r\n\r\nSitemap: https://hayrathayirlokmasi.com.tr/sitemap.xml\r\nSitemap: https://hayrathayirlokmasi.com.tr/sitemap.rss\n"
+      },
+      "/sitemap.xml": {
+        "status": 200,
+        "final_url": "https://hayrathayirlokmasi.com.tr/sitemap.xml",
+        "error": null
+      }
+    },
+    {
+      "requested_url": "https://www.izmirlokmaci.com.tr/",
+      "observed_at": "2026-11-26",
+      "http_status": 200,
+      "final_url": "https://www.izmirlokmaci.com.tr/",
+      "title": "İzmir Lokma, İzmir Lokmacı, Hayır Lokması, Lokma Fiyatı",
+      "h1": [
+        "İzmir Lokma"
+      ],
+      "description": "İzmir lokma firması olarak, seyyar İzmir lokmacı ekibimizle kampanyalı İzmir lokma fiyatı ile profesyonel hayır lokması hizmeti veriyoruz.",
+      "robots_meta": "index, follow",
+      "canonical": [
+        "https://www.izmirlokmaci.com.tr/"
+      ],
+      "html_lang": "tr",
+      "jsonld_block_count": 0,
+      "image_count": 13,
+      "images_missing_alt_attribute": 0,
+      "http_security_headers": {},
+      "/robots.txt": {
+        "status": 200,
+        "final_url": "https://www.izmirlokmaci.com.tr/robots.txt",
+        "error": null,
+        "body": "User-agent: *\nSitemap: https://www.izmirlokmaci.com.tr/sitemap.xml"
+      },
+      "/sitemap.xml": {
+        "status": 200,
+        "final_url": "https://www.izmirlokmaci.com.tr/sitemap.xml",
+        "error": null
+      }
+    },
+    {
+      "requested_url": "https://www.izmirlokma.web.tr/",
+      "observed_at": "2026-11-26",
+      "http_status": 200,
+      "final_url": "https://www.izmirlokma.web.tr/",
+      "title": "İzmir Lokma, İzmir Lokmacı, İzmir Lokma Fiyatı, Saray Lokma",
+      "h1": [
+        "İzmir Lokma"
+      ],
+      "description": "İzmir lokma, hizmetlerimize, İzmir lokma fiyatımıza dair, İzmir lokmacı firmamızın bilgilendirmesidir.",
+      "robots_meta": "index, follow",
+      "canonical": [
+        "https://www.izmirlokma.web.tr/"
+      ],
+      "html_lang": "tr",
+      "jsonld_block_count": 0,
+      "image_count": 20,
+      "images_missing_alt_attribute": 0,
+      "http_security_headers": {},
+      "/robots.txt": {
+        "status": 200,
+        "final_url": "https://www.izmirlokma.web.tr/robots.txt",
+        "error": null,
+        "body": "User-agent: *\r\nAllow: /\r\n\r\nUser-agent: GPTBot\r\nAllow: /\r\n\r\nUser-agent: OAI-SearchBot\r\nAllow: /\r\n\r\nUser-agent: PerplexityBot\r\nAllow: /\r\n\r\nUser-agent: ClaudeBot\r\nAllow: /\r\n\r\nUser-agent: Google-Extended\r\nAllow: /\r\n\r\nUser-agent: CCBot\r\nAllow: /\r\n\r\nUser-agent: ChatGPT-User\r\nAllow: /\r\n\r\nUser-agent: Perplexity-User\r\nAllow: /\r\n\r\nUser-agent: Applebot-Extended\r\nAllow: /\r\n\r\nUser-agent: Meta-ExternalAgent\r\nAllow: /\r\n\r\nUser-agent: Amazonbot\r\nAllow: /\r\n\r\nUser-agent: Bytespider\r\nAllow: /\r\n\r\nSitemap: https://www.izmirlokma.web.tr/sitemap.xml"
+      },
+      "/sitemap.xml": {
+        "status": 200,
+        "final_url": "https://www.izmirlokma.web.tr/sitemap.xml",
+        "error": null
+      }
+    },
+    {
+      "requested_url": "https://izmirlokmasi.com/",
+      "observed_at": "2026-11-26",
+      "http_status": 200,
+      "final_url": "https://izmirlokmasi.com/",
+      "title": "İstanbul Lokma Siparişi ve İzmir Lokması | Hanifi Usta",
+      "h1": [
+        "Yerindeİzmir lokmasıdökümü."
+      ],
+      "description": "İstanbul ve çevre illerde lokma siparişi, hayır lokması döktürme ve mevlit ikramı için Hanifi Usta ile görüşün. İzmir veya saray lokması için teklif alın.",
+      "robots_meta": "index,follow,max-image-preview:large",
+      "canonical": [
+        "https://izmirlokmasi.com/"
+      ],
+      "html_lang": "tr",
+      "jsonld_block_count": 1,
+      "image_count": 7,
+      "images_missing_alt_attribute": 0,
+      "http_security_headers": {},
+      "/robots.txt": {
+        "status": 200,
+        "final_url": "https://izmirlokmasi.com/robots.txt",
+        "error": null,
+        "body": "User-agent: *\nAllow: /\nSitemap: https://izmirlokmasi.com/sitemap.xml\n"
+      },
+      "/sitemap.xml": {
+        "status": 200,
+        "final_url": "https://izmirlokmasi.com/sitemap.xml",
+        "error": null
+      }
+    }
+  ]
+}

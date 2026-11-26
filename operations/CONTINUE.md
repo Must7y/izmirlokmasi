@@ -1,15 +1,15 @@
 # Devam kaydı
 
-26 Kasım 2026. Önce bu dosyayı, AGENTS.md ve reports/FRONTEND-BACKEND-SEO-2026-11-26.md dosyasını oku.
+26 Kasım 2026. Önce AGENTS.md, operations/README.md ve reports/RAKIP-SEO-2026-11-26.md okunmalı.
 
-Başlangıç yayını b19d55777d99ef8720275c9eec670063424bf427. Bu çalışma frontend + teknik yayın kontrolleri + kullanıcı tarafından istenen İstanbul/sipariş/döktürme SEO kapsamını içerir. Kaynak değişiklikleri bu dalda; birleştirme ve canlı doğrulama durumu PR/Actions/build-info.json üzerinden yeniden görülmeden yayımlandı varsayma.
+Önceki PR #10 birleşti; ana dal ve Pages yayını 693b01659bf51f87a62bde8b76453ac99ab56b22. Sosyal ikonlar, 46 ifadeli kelime haritası, İstanbul/sipariş/döktürme içeriği, arayüz ve ölçüm rızası düzeltmeleri bu yayında. İlk canlı doğrulamadaki robots.txt 503 yanıtı son normal HTTP gözleminde 200; sitemap da 200.
 
-Tamamlanan yerel işler: görünür yön ikonları, iletişim bilgileri ve footer erişimi, footer çakışması, rıza geri alma düzeltmesi, 46 ifadeli anahtar kelime haritası ve dört hizmet sayfasının özgün sipariş içeriği, HTTP başlık kontrolü, hazırlanmış edge başlık değerleri.
+Yeni tur: Beş rakibin içerik ve canlı HTML/robots/sitemap kıyası reports/competitor-snapshot-2026-11-26.json dosyasında. İletişime teklif kapsamı, ana ve dört hizmet sayfasından bağlantılar eklendi. npm ci/test (46+15), audit:full (0), 20 Chromium görünümü başarılı. Yayın durumu PR/Actions/build-info.json üzerinden yeniden doğrulanmadan aday canlı sayılmamalı.
 
-Yapılacak doğrulama: npm test + npm run audit:full; Chromium 320/390/768/1440; PR kalite/CodeQL; Pages yayını; canlı commit/rota/JS/ikon denetimi; son kaynak+yayın yapıtı ve raporu mevcut Drive yedek klasörüne ekleme. Başarılı sonuçlar raporun doğrulama bölümüne kaydedilir.
+Kalan yayın işleri: PR/CI; Pages sonrası beklenen commit ile verify:live; gerçek kaynak + GitHub Pages yapıtı + raporu Drive klasörü 15hpCogLlPTH8kwsunNYEmsrEYpV5FVeW içine yeni yedek olarak yükleme ve geri okuma. Son tamamlanmış eski yedek b19d557 sürümüdür; daha yeni yedek kaydı bulunmadan tamamlandı deme.
 
-Çözülemeyen dış bağımlılık: gerçek HTTP HSTS/frame-ancestors/nosniff için domain/CDN yönetimi gerekir. DNS/hosting değiştirilmedi. Hazır JSON’u aktif başlık gibi raporlama. Ads erişim engelini aşmaya çalışma; bütçe ve gerçek işletme bilgileri olmadan reklam/profil oluşturma.
+Dış bağımlılıklar: Hanifi Usta Google Maps profil bağlantısı/yönetici hesabı, gerçek iş fotoğrafları, güncel fiyat/kapsam ve işletme bilgileri, HTTP başlıkları için domain/CDN paneli. GitHub Pages _headers uygulamıyor; hazırlanmış JSON aktif başlık değildir. Ads arayüzü ajan erişimini engelledi; engeli aşmaya çalışma. Başka işletme profillerini değiştirme.
 
-Gizli anahtar kelime sayfası/otomatik ana sayfa yönlendirmesi yapılmayacak. Fiyat, kapasite, müşteri yorumu ve ilçe garantisi uydurulmayacak. Mevcut altı indekslenebilir URL, görseller ve tasarım korunacak.
+GSC en son gözlem: 17–24 Kasım 5 gösterim/0 tıklama/33,6 ortalama konum; yeni turda tekrar ölçülmedi. Sıralama artışı iddia etme; eşit 28 günlük dönemler ve aynı ülke/cihaz/sorgu kümeleriyle değerlendir.
 
-Kota yenilenmesi arka planda kendiliğinden çalışma başlatmaz; oturum yeniden devam ettiğinde kayıt ve uzak dal kontrol edilerek kalan iş alınır.
+Gizli kelime/doorway sayfası, kopya ilçe sayfası, sahte fiyat/yorum/kapasite/sertifika oluşturulmayacak. Altı indekslenebilir URL, mevcut tasarım ve iletişim bilgileri korunacak. Kota yenilenmesi kendiliğinden işi başlatmaz; kullanıcı devam dediğinde bu kayıt ve uzak dal kontrol edilir.
