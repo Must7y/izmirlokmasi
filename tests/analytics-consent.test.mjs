@@ -16,7 +16,7 @@ function browser({saved = null, hostname = 'izmirlokmasi.com', blocked = false} 
   const window = {addEventListener: (name, fn) => {handlers[name] = fn;}};
   const context = {window, document, URL, Date, localStorage: {getItem: () => saved, setItem: (_, value) => {if (blocked) throw Error('blocked'); saved = value;}}, location: {hostname, pathname: '/hayir-lokmasi/', reload: () => {reloaded++;}}};
   vm.runInNewContext(source, context);
-  return {window, scripts, handlers, cookies, status, reloaded: () => reloaded};
+  return {window, scripts, handlers, cookies, status, clearStorage: () => {saved = null;}, reloaded: () => reloaded};
 }
 test('fresh, denied, expired and unavailable storage never load Google', () => {
   for (const saved of [null, 'bad json', JSON.stringify({choice: 'denied', at: Date.now()}), JSON.stringify({choice: 'granted', at: 0})]) {
@@ -31,7 +31,7 @@ test('explicit consent loads one exact tag, strips query data and denies ads', (
   const consent = commands.find(args => args[0] === 'consent')[2];
   assert.equal(consent.ad_storage, 'denied'); assert.equal(consent.ad_user_data, 'denied'); assert.equal(consent.ad_personalization, 'denied');
   const config = commands.find(args => args[0] === 'config')[2];
-  assert.equal(config.page_referrer, 'https://example.com'); assert.equal(config.page_location, 'https://izmirlokmasi.com/hayir-lokmasi/');
+  assert.equal(config.cookie_flags, 'SameSite=Lax;Secure'); assert.equal(config.page_referrer, 'https://example.com'); assert.equal(config.page_location, 'https://izmirlokmasi.com/hayir-lokmasi/');
   assert.equal(config.allow_google_signals, false); assert.equal(config.allow_ad_personalization_signals, false);
 });
 test('contact events contain only channel; revocation disables events and clears cookies', () => {
@@ -48,4 +48,9 @@ test('contact events contain only channel; revocation disables events and clears
 test('preview domains cannot collect and storage errors do not break explicit consent', () => {
   const preview = browser({hostname: 'localhost'}); preview.handlers.granted(); assert.equal(preview.scripts.length, 0);
   const b = browser({blocked: true}); assert.doesNotThrow(() => b.handlers.granted()); assert.equal(b.scripts.length, 1);
+});
+
+test('clearing site storage in another tab revokes an already running measurement', () => {
+  const b = browser(); b.handlers.granted(); b.clearStorage(); b.handlers.storage({key: null});
+  assert.equal(b.window['ga-disable-G-REPV5VHRCZ'], true); assert.equal(b.reloaded(), 1);
 });

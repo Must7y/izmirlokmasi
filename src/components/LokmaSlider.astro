@@ -1,4 +1,5 @@
 ---
+import ArrowIcon from './ArrowIcon.astro';
 // İki gerçek ürün için sıfır üçüncü taraf bağımlılıkla çalışan doğal kaydırma galerisi.
 const items = [
   { name: 'İzmir lokması', sub: 'Halka halka, paylaşa paylaşa.', image: 'lokma-real-appetizing.webp', width: 1280, height: 960, path: 'izmir-lokmasi', description: 'İzmir’in bildiğiniz halka lokması. Hayırda, mevlitte ya da güzel bir haberi paylaşırken.' },
@@ -9,15 +10,15 @@ const items = [
   <div class="tasting-head">
     <div><p class="eyebrow">İKİ ŞEKİL, AYNI GÜZEL VESİLE</p><h2>Sizin lokmanız<br/><em>hangisi?</em></h2></div>
     <div class="slider-controls" aria-label="Galeri kontrolleri">
-      <button class="lokma-prev" type="button" aria-label="Önceki lokma" aria-controls="lokma-track">←</button>
-      <button class="lokma-next" type="button" aria-label="Sonraki lokma" aria-controls="lokma-track">→</button>
+      <button class="lokma-prev" type="button" aria-label="Önceki lokma" aria-controls="lokma-track"><ArrowIcon direction="left"/></button>
+      <button class="lokma-next" type="button" aria-label="Sonraki lokma" aria-controls="lokma-track"><ArrowIcon direction="right"/></button>
     </div>
   </div>
   <div id="lokma-track" class="lokma-track" role="region" aria-roledescription="kaydırılabilir galeri" aria-label="İzmir ve saray lokması fotoğrafları" tabindex="0">
     {items.map((item, i) =>
       <article class="tasting-card" aria-label={`${i + 1} / ${items.length}: ${item.name}`}>
         <div class="tasting-image"><img src={`/images/${item.image}`} alt={`${item.name} fotoğrafı`} width={item.width} height={item.height} loading="lazy" decoding="async"/></div>
-        <div class="tasting-copy"><span class="eyebrow">0{i + 1} / LOKMALARIMIZ</span><h3>{item.name}</h3><p class="tasting-sub">{item.sub}</p><p>{item.description}</p><a class="text-link" href={`/${item.path}/`}>{item.name} hakkında bilgi ↗</a></div>
+        <div class="tasting-copy"><span class="eyebrow">0{i + 1} / LOKMALARIMIZ</span><h3>{item.name}</h3><p class="tasting-sub">{item.sub}</p><p>{item.description}</p><a class="text-link" href={`/${item.path}/`}>{item.name} hakkında bilgi <ArrowIcon/></a></div>
       </article>
     )}
   </div>

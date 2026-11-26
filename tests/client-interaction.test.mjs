@@ -27,3 +27,13 @@ test('mobilde kartlar alt alta: gizli galeri butonları devre dışıdır',()=>{
  assert.equal(previous.disabled,true);assert.equal(next.disabled,true);
  next.click();assert.equal(track.scrollLeft,0);
 });
+
+test('floating contact leaves footer controls unobstructed when footer becomes visible', () => {
+ const floating={hidden:false}; const footer={}; let notify;
+ class Observer{constructor(callback){notify=callback;}observe(target){assert.equal(target,footer);}}
+ const document={querySelector:(selector)=>selector==='footer'?footer:selector==='.floating-wa'?floating:null,getElementById:()=>null,querySelectorAll:()=>[]};
+ const window={matchMedia:()=>({matches:true}),IntersectionObserver:Observer};
+ vm.runInNewContext(source,{document,window,IntersectionObserver:Observer});
+ notify([{isIntersecting:true}]);assert.equal(floating.hidden,true);
+ notify([{isIntersecting:false}]);assert.equal(floating.hidden,false);
+});

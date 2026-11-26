@@ -1,4 +1,5 @@
 ---
+import ArrowIcon from '../components/ArrowIcon.astro';
 import Layout from '../layouts/Layout.astro';
 ---
 <Layout title="Sayfa bulunamadı · Hanifi Usta" description="Aradığınız sayfa bulunamadı. Hanifi Usta ana sayfasından lokma çeşitlerimizi keşfedebilirsiniz." noindex={true}>
@@ -6,6 +7,6 @@ import Layout from '../layouts/Layout.astro';
     <p class="eyebrow">404 · SAYFA BULUNAMADI</p>
     <h1>Bu sayfa<br/><em>bulunamadı.</em></h1>
     <p>Adres değişmiş veya sayfa kaldırılmış olabilir. Lokmalarımıza ana sayfadan ulaşabilirsiniz.</p>
-    <a class="button" href="/">Ana sayfaya dön <span aria-hidden="true">↗</span></a>
+    <a class="button" href="/">Ana sayfaya dön <ArrowIcon/></a>
   </main>
 </Layout>

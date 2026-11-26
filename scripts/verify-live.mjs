@@ -1,14 +1,15 @@
 // Read-only production verification: no probing flood; static content only.
+import {securityHeaderGaps} from './security-headers.mjs';
 import {inspectPage, inspectSitemap, inspectRobots, origin} from './seo-checks.mjs';
 const base = new URL(process.argv[2] || 'https://izmirlokmasi.com');
-const cloudflareHeaders = process.argv.includes('--cloudflare-headers');
+const cloudflareHeaders = process.argv.includes('--cloudflare-headers') || process.argv.includes('--require-security-headers');
 const revisionIndex=process.argv.indexOf('--expected-revision');
 const expectedRevision=revisionIndex===-1?null:process.argv[revisionIndex+1];
 if (revisionIndex!==-1 && !/^[a-f0-9]{40}$/.test(expectedRevision||'')) throw new Error('Expected revision must be a full commit SHA');
 if (base.protocol !== 'https:' || !base.hostname) throw new Error('Verified HTTPS host is required');
 if (base.origin !== origin || base.username || base.password || base.pathname !== '/' || base.search || base.hash) throw new Error('Only the configured production origin can be verified');
 const routes = ['/', '/izmir-lokmasi', '/saray-lokmasi','/hayir-lokmasi','/mevlit-lokmasi','/iletisim','/gizlilik'];
-const assets = ['/robots.txt','/sitemap.xml','/js/site.js','/images/lokma-real-appetizing.webp','/favicon.svg'];
+const assets = ['/robots.txt','/sitemap.xml','/js/site.js','/js/analytics.js','/icons/arrow-up-right.svg','/images/lokma-real-appetizing.webp','/favicon.svg'];
 const unknown = ['/__izmir_missing_check_2026__','/.env','/.git/config','/package.json'];
 let failures = 0; let warnings = 0;
 const fail=(path,message)=>{failures++;console.log(`FAIL ${path}: ${message}`)};
@@ -49,11 +50,11 @@ for(const p of [...routes,...assets,...unknown]){
         if(!html.includes('rel="canonical"'))fail(p,'Canonical missing');
         if(/<meta name="robots"[^>]*noindex/i.test(html)|| /\bnoindex\b/i.test(res.headers.get('x-robots-tag')||''))fail(p,'Production home unexpectedly noindex');
         if(cloudflareHeaders && !res.headers.has('strict-transport-security'))warn(p,'HSTS disabled; only enable after validated HTTPS and redirect rollout');
-        if(!cloudflareHeaders && !res.headers.has('content-security-policy')) warn(p,'Pages does not enforce HTTP-level CSP, frame-ancestors, HSTS or frame protection. Use a trusted proxy if required.');
+        for (const gap of securityHeaderGaps(res.headers)) { if (cloudflareHeaders) fail(p,gap); else warn(p,gap); }
      }
    }
-   if(p==='/js/site.js'){
-     if(!/javascript|ecmascript/.test(type))warn(p,`Review JS MIME ${type}`);
+   if(p.startsWith('/js/')){
+     if(!/javascript|ecmascript/.test(type))fail(p,`Unexpected JS MIME ${type}`);
      if(cloudflareHeaders && res.headers.get('cross-origin-resource-policy')!=='same-origin')warn(p,'JS CORP policy missing');
    }
    if(p.startsWith('/images/') && res.headers.get('cross-origin-resource-policy')==='same-origin')fail(p,'Image preview would be blocked cross-origin');

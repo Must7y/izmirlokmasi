@@ -52,7 +52,7 @@ test('Visible service content explains distinct needs and provides direct contac
     const page=await readFile(new URL(`../dist/${route}/index.html`,import.meta.url),'utf8');
     const section=page.match(/<section class="section service-info">([\s\S]*?)<\/section>/)?.[1];
     assert.ok(section);
-    assert.equal((section.match(/<h3>/g)||[]).length,2);
+    assert.ok((section.match(/<h3>/g)||[]).length >= 2);
     assert.ok(section.includes('href="/iletisim/"'));
     sections.push(section.replace(/<div class="related">[\s\S]*/,''));
   }

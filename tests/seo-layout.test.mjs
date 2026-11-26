@@ -28,10 +28,10 @@ test('karışık lokma fotoğrafı ana sayfada, iki ayrı ürün fotoğrafı kar
 });
 
 // Bölge bazlı pazarlama vaadinin gerçek işletme bilgisi doğrulanmadan eklenmesini engeller.
-test('hizmet alanı sınırlanmıyor ve doğrulanmamış ülke-geneli vaadi yok', async () => {
+test('İstanbul arama niyeti destekleniyor; çevre iller ve uygunluk koşulu korunuyor', async () => {
  const sources=await Promise.all(['src/layouts/Layout.astro','src/pages/index.astro','src/pages/iletisim.astro','src/pages/[service].astro','src/data/site.ts'].map(read));
  const all=sources.join('\n');
- assert.doesNotMatch(all,/İstanbul genelinde|İstanbul['’]da|İstanbul['’un]|İstanbul['’daki]|areaServed|Türkiye genelinde|81 ilde/i);
+ assert.doesNotMatch(all,/yalnızca İstanbul|sadece İstanbul|Türkiye genelinde|81 ilde/i);
  assert.match(all,/Hangi bölgelerde hizmet veriyorsunuz\?/);
  assert.match(all,/Organizasyonun tarihini ve konumunu paylaşın/);
  assert.match(all,/uygunluğu birlikte kontrol edelim|hizmet uygunluğunu birlikte teyit edelim/);

@@ -9,6 +9,15 @@
     document.querySelectorAll('[data-reveal]').forEach((element) => { element.classList.add('will-reveal'); observer.observe(element); });
   }
 
+  const footer = document.querySelector('footer');
+  const floating = document.querySelector('.floating-wa');
+  if (footer && floating && 'IntersectionObserver' in window) {
+    const footerObserver = new IntersectionObserver((entries) => {
+      floating.hidden = entries.some((entry) => entry.isIntersecting);
+    });
+    footerObserver.observe(footer);
+  }
+
   const track = document.getElementById('lokma-track');
   const previous = document.querySelector('.lokma-prev');
   const next = document.querySelector('.lokma-next');
