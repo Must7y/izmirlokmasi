@@ -1,3 +1,5 @@
+Güncel karşılaştırma: [Beş rakip ve uygulama](../reports/RAKIP-SEO-2026-11-26.md).
+
 Güncel inceleme: [Frontend, altyapı ve SEO](../reports/FRONTEND-BACKEND-SEO-2026-11-26.md). Devam noktası: [CONTINUE.md](CONTINUE.md).
 
 Güncel Google hesap/ölçüm kaydı: [26 Kasım](../reports/GOOGLE-KURULUM-2026-11-26.md).
