@@ -9,7 +9,7 @@ if (revisionIndex!==-1 && !/^[a-f0-9]{40}$/.test(expectedRevision||'')) throw ne
 if (base.protocol !== 'https:' || !base.hostname) throw new Error('Verified HTTPS host is required');
 if (base.origin !== origin || base.username || base.password || base.pathname !== '/' || base.search || base.hash) throw new Error('Only the configured production origin can be verified');
 const routes = ['/', '/izmir-lokmasi', '/saray-lokmasi','/hayir-lokmasi','/mevlit-lokmasi','/iletisim','/gizlilik'];
-const assets = ['/robots.txt','/sitemap.xml','/js/site.js','/js/analytics.js','/icons/arrow-up-right.svg','/images/lokma-real-appetizing.webp','/favicon.svg'];
+const assets = ['/robots.txt','/sitemap.xml','/js/site.js','/js/analytics.js','/icons/arrow-up-right.svg','/images/lokma-real-appetizing.webp','/favicon.svg','/favicon.png','/favicon.ico','/apple-touch-icon.png'];
 const unknown = ['/__izmir_missing_check_2026__','/.env','/.git/config','/package.json'];
 let failures = 0; let warnings = 0;
 const fail=(path,message)=>{failures++;console.log(`FAIL ${path}: ${message}`)};
@@ -33,6 +33,8 @@ for(const p of [...routes,...assets,...unknown]){
    if(res.status!==200){fail(p,`HTTP ${res.status}`);continue;}
    if(cloudflareHeaders && res.headers.get('x-content-type-options')!=='nosniff')fail(p,'nosniff missing');
    const type=res.headers.get('content-type')||'';
+   if(p.endsWith('.png') && !type.includes('image/png'))fail(p,`Unexpected PNG content type: ${type}`);
+   if(p.endsWith('.ico') && !/image\/(?:x-icon|vnd\.microsoft\.icon)/.test(type))fail(p,`Unexpected icon content type: ${type}`);
    if(routes.includes(p)){
      if(!type.includes('text/html'))fail(p,`Unexpected content type: ${type}`);
      const csp=res.headers.get('content-security-policy')||'';

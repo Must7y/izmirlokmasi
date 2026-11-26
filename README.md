@@ -2,14 +2,9 @@
 
 Astro ile statik HTML/CSS üreten, telefon ve WhatsApp üzerinden iletişim sağlayan site. Alan adı: https://izmirlokmasi.com. Kaynak: https://github.com/Must7y/izmirlokmasi.
 
-## Güncel kayıtlar
+## Teknik bakım
 
-- [Bakım kılavuzu ve görevler](operations/README.md)
-- [26 Kasım yayın kontrolü](reports/YAYIN-KONTROL-2026-11-26.md)
-- [Google görünürlüğü teşhisi ve içerik düzenlemeleri](reports/SEO-GORUNURLUK-2026-11-26.md)
-- [SEO ve güvenlik uygulamaları](reports/SEO-SECURITY-2026-11-26.md)
-
-Eski tarihli sürüm raporları tarihçedir. Bir dalın kaynakları veya bu README dosyası, o sürümün canlıya çıktığını tek başına göstermez. Pages çalışması ve `/build-info.json` üzerinden canlı commit doğrulanır.
+[Bakım kılavuzu](operations/README.md). İşletmeye özel raporlar özel proje arşivinde tutulur. Canlı sürüm Pages çalışması ve `/build-info.json` üzerinden doğrulanır.
 
 ## Yerel çalışma
 
@@ -26,7 +21,7 @@ npm run dev
 
 ## Mimari ve sınırlar
 
-İki lokma çeşidi, dört hizmet sayfası, iletişim ve gizlilik sayfası vardır. Bordo-krem tasarım ve mevcut temsili ürün görselleri korunur. Form, üyelik, ödeme, veri tabanı, ziyaretçi analitiği ve reklam etiketi yoktur. Galeri tek küçük yerel betikle çalışır; harici slider paketi kullanılmaz.
+İki lokma çeşidi, dört hizmet sayfası, iletişim ve gizlilik sayfası vardır. Bordo-krem tasarım ve mevcut temsili ürün görselleri korunur. Form, üyelik, ödeme ve veri tabanı yoktur. GA4 ziyaretçinin açık izniyle yüklenir; varsayılan kapalıdır, reklam sinyalleri kapalıdır. Galeri tek küçük yerel betikle çalışır; harici slider paketi kullanılmaz.
 
 - `src/data/site.ts`: hizmet metinleri ve ayrı sayfa açıklamaları.
 - `src/layouts/Layout.astro`: metadata, canonical, Organization/WebSite/WebPage/Service/BreadcrumbList.

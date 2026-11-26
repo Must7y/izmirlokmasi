@@ -36,4 +36,6 @@ Bu görev tamamlandı: Astro `7.4.12` package.json ve kilit dosyasında eşleşi
 
 ## Bakım kayıtları
 
-Yeni çalışmada `operations/README.md`, `operations/agents.json` ve en yeni tarihli raporu oku. Kaynak eklentilerin sabit sürümleri `operations/sources.json` içindedir; ajan tanımı bulunması kurulum/çalıştırma kanıtı değildir. `npm test` ve `npm run audit:full` sonrasında `npm run audit:site -- --output outputs/maintenance` ile sayfa kanıtını kaydet. Canlı sürüm ve yayınlanmamış aday sonuçlarını ayrı raporla.
+Yeni çalışmada `operations/README.md` dosyasını ve mevcut CI/Pages sonuçlarını oku. İşletmeye özel rapor, rakip analizi, anahtar kelime stratejisi, reklam planı, Google hesap gözlemi ve devam kayıtlarını açık depoya ekleme. Bunları kullanıcının özel proje arşivinde tut. Kaynak dosyalarına gizli erişim bilgisi veya özel arşiv dosya kimliği ekleme.
+
+`npm test` ve `npm run audit:full` sonrasında gerekli yerel kanıtı git dışında `outputs/` altında tut. Canlı sürüm ile yayınlanmamış aday sonuçlarını ayır. Ajan yöntemi veya denetim komutu bulunması sürekli bir LLM ajanının çalıştığını göstermez.
