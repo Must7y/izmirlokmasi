@@ -1,0 +1,10 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import {securityHeaderGaps} from '../scripts/security-headers.mjs';
+const prepared = JSON.parse(readFileSync(new URL('../operations/http-response-headers.json',import.meta.url),'utf8'));
+const complete = () => new Headers({...prepared.headers,'Strict-Transport-Security':prepared.after_tls_and_redirect_verification_hsts});
+test('missing HTTP headers are reported even when HTML meta CSP might exist',()=>{assert.equal(securityHeaderGaps(new Headers()).length,5);});
+test('prepared edge policy passes only with long-term HSTS and real frame protection',()=>{assert.deepEqual(securityHeaderGaps(complete()),[]);});
+test('short rollout HSTS is not reported as the final six-month policy',()=>{const h=complete();h.set('strict-transport-security',prepared.initial_hsts);assert.equal(securityHeaderGaps(h).length,1);});
+test('unsafe CSP and missing MIME protection remain failures',()=>{const h=complete();h.set('content-security-policy',"default-src 'none'; frame-ancestors 'none'; script-src 'unsafe-inline'");h.delete('x-content-type-options');assert.equal(securityHeaderGaps(h).length,2);});

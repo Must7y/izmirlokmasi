@@ -1,0 +1,19 @@
+{
+  "status": "prepared_not_active_on_github_pages",
+  "scope": "izmirlokmasi.com and www.izmirlokmasi.com responses over HTTPS",
+  "initial_hsts": "max-age=300",
+  "after_tls_and_redirect_verification_hsts": "max-age=15768000",
+  "headers": {
+    "Content-Security-Policy": "default-src 'none'; script-src 'self' https://www.googletagmanager.com; script-src-attr 'none'; style-src 'self'; style-src-attr 'none'; img-src 'self'; font-src 'self'; connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com; frame-src 'none'; frame-ancestors 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests",
+    "X-Frame-Options": "DENY",
+    "X-Content-Type-Options": "nosniff",
+    "Referrer-Policy": "strict-origin-when-cross-origin",
+    "Permissions-Policy": "camera=(), microphone=(), geolocation=()"
+  },
+  "notes": [
+    "These must be actual HTTP response headers; HTML meta tags cannot implement HSTS, nosniff or frame-ancestors.",
+    "Requires access to a response-header-capable CDN/proxy or hosting configuration; GitHub Pages does not consume public/_headers.",
+    "Do not enable includeSubDomains or preload without separately validating all subdomains.",
+    "After activation verify /, /iletisim/, /js/analytics.js, /icons/arrow-up-right.svg and a real 404 with verify:live -- --cloudflare-headers."
+  ]
+}

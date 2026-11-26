@@ -44,7 +44,7 @@
     {
       "id": "security",
       "mode": "deterministic-and-review",
-      "status": "tested-locally-ci-pending",
+      "status": "tested-on-published-google-setup",
       "upstream": [
         "pya:dependency-auditor",
         "pya:iac-scanner",
@@ -65,7 +65,7 @@
     {
       "id": "live-health",
       "mode": "deterministic",
-      "status": "tested-on-current-production-with-expected-drift",
+      "status": "tested-on-published-google-setup",
       "upstream": [
         "claude-seo:seo-technical",
         "claude-seo:seo-drift"

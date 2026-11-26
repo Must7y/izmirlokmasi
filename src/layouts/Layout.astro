@@ -1,8 +1,9 @@
 ---
+import ArrowIcon from '../components/ArrowIcon.astro';
 import '../styles/site.css';
 import {whatsapp} from '../data/site';
 import SocialIcon from '../components/SocialIcon.astro';
-const {title='İzmir Lokması ve Yerinde Lokma Dökümü | Hanifi Usta',description='İstanbul ve çevre illerde hayır, mevlit ve özel günler için yerinde İzmir lokması ve saray lokması döküyoruz. Tarih ve konumunuzu paylaşarak teklif alın.',noindex=false,service}=Astro.props;
+const {title='İstanbul Lokma Siparişi ve İzmir Lokması | Hanifi Usta',description='İstanbul ve çevre illerde lokma siparişi, hayır lokması döktürme ve mevlit ikramı için Hanifi Usta ile görüşün. İzmir veya saray lokması için teklif alın.',noindex=false,service}=Astro.props;
 const canonical=new URL(Astro.url.pathname.replace(/\/?$/, '/'), Astro.site);
 const homepage='https://izmirlokmasi.com';
 const socialProfiles = [
@@ -24,7 +25,7 @@ const schema={
     }] : []),
     ...(service && !noindex ? [{
       '@type':'Service','@id':canonical.href+'#service',url:canonical.href,
-      name:service.name,description:service.body,serviceType:service.name,
+      name:service.name,description:service.body,serviceType:service.name,areaServed:'İstanbul ve çevre iller',
       provider:{'@id':homepage+'/#organization'}
     }] : []),
     ...(!noindex && Astro.url.pathname!=='/' ? [{
@@ -41,6 +42,7 @@ const schema={
 <html lang="tr">
 <head>
   <meta charset="UTF-8"/>
+  <meta name="referrer" content="strict-origin-when-cross-origin"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <!-- Pages yanit basliklarini degistiremedigi icin istemci tarafinda CSP. frame-ancestors / HSTS icin HTTP basligi gerekir. -->
   <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://www.googletagmanager.com; script-src-attr 'none'; style-src 'self'; style-src-attr 'none'; img-src 'self'; font-src 'self'; connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com; frame-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests"/>
@@ -67,7 +69,7 @@ const schema={
 </head>
 <body>
 <a class="skip" href="#main">İçeriğe geç</a>
-<div class="top-note"><span>HAYIR • MEVLİT • ÖZEL GÜN LOKMASI</span><a href={whatsapp} target="_top" aria-label="Tarihinizi birlikte planlayalım: WhatsApp üzerinden bilgi alın">Tarihinizi birlikte planlayalım <span aria-hidden="true">↗</span></a></div>
+<div class="top-note"><span>HAYIR • MEVLİT • ÖZEL GÜN LOKMASI</span><a href={whatsapp} target="_top" aria-label="Tarihinizi birlikte planlayalım: WhatsApp üzerinden bilgi alın">Tarihinizi birlikte planlayalım <ArrowIcon/></a></div>
 <header class="header">
   <a class="brand" href="/">
     <img src="/images/hanifi-logo-vector-integrated.webp" width="72" height="72" alt=""/>
@@ -76,10 +78,10 @@ const schema={
   <a class="button button-header" href={whatsapp} target="_top"><img class="wa-icon" src="/icons/whatsapp.svg" alt="" width="21" height="21"/> WhatsApp’tan yazın</a>
 </header>
 <slot/>
-<footer class="footer footer-minimal"><div class="footer-identity"><a class="footer-word" href="/">Hanifi Usta</a><span>Lokmanın en güzel yanı, paylaşılması.</span></div><div class="footer-meta"><span>© {new Date().getFullYear()} Hanifi Usta</span><a href="/gizlilik/">Gizlilik ve görsel bilgileri</a>
+<footer class="footer footer-minimal"><div class="footer-identity"><a class="footer-word" href="/">Hanifi Usta</a><span>Lokmanın en güzel yanı, paylaşılması.</span></div><div class="footer-meta"><span>© {new Date().getFullYear()} Hanifi Usta</span><a href="/iletisim/">İletişim</a><a href="/gizlilik/">Gizlilik ve görsel bilgileri</a>
   {socialProfiles.map(profile => <a class="social-link" href={profile.url}><SocialIcon name={profile.name}/>{profile.name}</a>)}
   <a class="social-link" href={facebookShareUrl}><SocialIcon name="Facebook"/>Facebook</a></div><details class="analytics-preference"><summary>İstatistik tercihi</summary><p>Ziyaret edilen sayfaları ve iletişim bağlantısı tıklamalarını Google Analytics ile ölçmemize izin verebilirsiniz. İzin verene kadar Google Analytics yüklenmez. Tercihinizi buradan değiştirebilirsiniz. <a href="/gizlilik/#istatistik">Ayrıntılar</a></p><p id="analytics-status" role="status">Ziyaret istatistiği kapalı.</p><div class="analytics-actions"><button type="button" data-analytics-choice="granted" hidden>İzin ver</button><button type="button" data-analytics-choice="denied" hidden>Kapalı tut</button></div><noscript>JavaScript kapalı olduğundan istatistik toplanmaz.</noscript></details></footer>
-<a class="floating-wa" href={whatsapp} target="_top" aria-label="Hanifi Usta’ya WhatsApp’tan yazın"><img class="wa-icon" src="/icons/whatsapp.svg" alt="" width="21" height="21"/><span>WhatsApp’tan yazın</span><span aria-hidden="true">↗</span></a>
+<a class="floating-wa" href={whatsapp} target="_top" aria-label="Hanifi Usta’ya WhatsApp’tan yazın"><img class="wa-icon" src="/icons/whatsapp.svg" alt="" width="21" height="21"/><span>WhatsApp’tan yazın</span><ArrowIcon/></a>
 <script is:inline src="/js/site.js" defer></script>
 <script is:inline src="/js/analytics.js" defer></script>
 </body></html>

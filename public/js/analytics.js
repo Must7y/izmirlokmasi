@@ -34,7 +34,7 @@
     try { referrer = new URL(document.referrer).origin; } catch { /* No usable referrer. */ }
     window.gtag('config', id, {
       allow_google_signals: false, allow_ad_personalization_signals: false,
-      cookie_expires: lifetime / 1000, cookie_update: false,
+      cookie_expires: lifetime / 1000, cookie_update: false, cookie_flags: 'SameSite=Lax;Secure',
       page_location: 'https://izmirlokmasi.com' + location.pathname,
       page_referrer: referrer
     });
@@ -62,7 +62,7 @@
     });
   });
   window.addEventListener('storage', (event) => {
-    if (event.key === key && !read()) { window['ga-disable-' + id] = true; clearCookies(); location.reload(); }
+    if ((event.key === key || event.key === null) && !read()) { window['ga-disable-' + id] = true; clearCookies(); location.reload(); }
   });
   document.addEventListener('click', (event) => {
     if (!started || window['ga-disable-' + id]) return;
