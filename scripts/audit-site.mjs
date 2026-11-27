@@ -1,4 +1,4 @@
-import {readFile, access, mkdir, writeFile, appendFile} from 'node:fs/promises';
+import {readFile, open, mkdir, writeFile, appendFile} from 'node:fs/promises';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {inspectPage, inspectSitemap, inspectRobots, indexableRoutes, attributes} from './seo-checks.mjs';
@@ -19,12 +19,14 @@ for (const route of routes) {
     if (filename !== path.resolve(root) && !filename.startsWith(root)) { result.errors.push(`Asset outside build: ${href}`); continue; }
     if (!path.extname(filename)) filename = path.join(filename, 'index.html');
     try {
-      await access(filename);
+      const handle = await open(filename, 'r');
+      try {
       if (local.hash && filename.endsWith('.html')) {
-        const target = await readFile(filename, 'utf8');
+        const target = await handle.readFile('utf8');
         const ids = [...target.matchAll(/\bid\s*=\s*(?:"([^"]*)"|'([^']*)')/gi)].map(m=>m[1] ?? m[2]);
         if (!ids.includes(decodeURIComponent(local.hash.slice(1)))) result.errors.push(`Broken local fragment: ${href}`);
       }
+      } finally { await handle.close(); }
     } catch { result.errors.push(`Broken local link: ${href}`); }
   }
   pages.push(result);
