@@ -115,8 +115,7 @@ test('Business service links in the schema resolve to the emitted canonical serv
 test('Order guide has visible authorship, valid article references and all navigation destinations',async()=>{
  const guide=await readFile(new URL('../dist/lokma-siparisi-rehberi/index.html',import.meta.url),'utf8');
  assert.deepEqual(inspectPage(guide,'/lokma-siparisi-rehberi/').errors,[]);
- assert.match(guide,/<time datetime="2026-11-27">/);
+ assert.doesNotMatch(guide,/<time\b|dateModified|datePublished/);
+ assert.ok(!xml.includes('<lastmod>'));
  assert.match(guide,/aria-current="page"[^>]*>Sipariş rehberi/);
- const broken=guide.replace('"dateModified":"2026-11-27"','"dateModified":"2099-01-01"');
- assert.ok(inspectPage(broken,'/lokma-siparisi-rehberi/').errors.includes('Article date mismatch'));
 });

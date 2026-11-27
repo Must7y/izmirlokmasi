@@ -4,20 +4,21 @@ const {whatsapp=defaultWhatsapp}=Astro.props;
 ---
 <aside class="contact-dock" aria-label="Hızlı erişim">
   <a class="lokma-top" href="#sayfa-basi" aria-label="Sayfanın başına dön">
-    <svg class="lokma-medallion" viewBox="0 0 72 72" fill="none" aria-hidden="true">
+    <svg class="lokma-sculpture" viewBox="0 0 72 72" aria-hidden="true">
       <defs>
-        <linearGradient id="lokma-gold" x1="12" y1="9" x2="58" y2="64" gradientUnits="userSpaceOnUse"><stop stop-color="#f7dd9c"/><stop offset=".42" stop-color="#d89a42"/><stop offset="1" stop-color="#96521f"/></linearGradient>
+        <mask id="lokma-cutout"><path fill="white" fill-rule="evenodd" d="M35 7C50 6 61 14 66 28C71 43 64 58 50 64C35 71 18 66 9 55C0 44 4 25 14 16C21 10 27 8 35 7ZM38 24C33 24 29 29 29 35C29 41 33 45 38 44C44 43 47 37 46 32C45 27 42 24 38 24Z"/></mask>
+        <filter id="lokma-silver"><feColorMatrix type="saturate" values="0"/></filter>
+        <clipPath id="lokma-reveal"><rect data-scroll-progress x="0" y="72" width="72" height="0"/></clipPath>
       </defs>
-      <path class="lokma-rim" d="M36 9C51 8 63 20 63 35C65 50 52 63 37 63C21 65 8 52 9 37C7 21 20 8 36 9Z"/>
-      <circle class="lokma-fill" data-scroll-progress cx="36" cy="36" r="26" pathLength="100" stroke-dasharray="100" stroke-dashoffset="100" transform="rotate(-90 36 36)"/>
-      <path class="lokma-glaze" d="M17 29C19 19 26 15 34 15"/>
-      <path class="lokma-up" d="M36 45V27M29 34L36 27L43 34"/>
+      <g mask="url(#lokma-cutout)">
+        <image href="/images/lokma-real-appetizing.webp" x="-98" y="-22" width="256" height="192" filter="url(#lokma-silver)"/>
+        <image href="/images/lokma-real-appetizing.webp" x="-98" y="-22" width="256" height="192" clip-path="url(#lokma-reveal)"/>
+      </g>
     </svg>
-    <span class="top-caption">Başa dön</span>
+    <span class="dock-hint">Lokmaya dokun, başa dön</span>
   </a>
   <a class="floating-wa" href={whatsapp} target="_top" aria-label="Hanifi Usta’ya WhatsApp’tan yazın">
-    <span class="dock-wa-symbol"><img src="/icons/whatsapp.svg" alt="" width="26" height="26"/></span>
-    <span class="dock-wa-copy"><small>HANİFİ USTA · WHATSAPP</small><span>Birlikte planlayalım</span></span>
-    <svg class="dock-wa-arrow" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 19L19 5M6 5H19V18"/></svg>
+    <img src="/icons/whatsapp.svg" alt="" width="25" height="25"/>
+    <span class="dock-hint">Hanifi Usta’ya yazın</span>
   </a>
 </aside>

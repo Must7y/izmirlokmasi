@@ -39,7 +39,6 @@ const schema={
       mainEntityOfPage:{'@id':canonical.href+'#webpage'},
       author:{'@type':'Organization','@id':homepage+'/#organization',name:'Hanifi Usta',url:homepage+'/'},
       publisher:{'@id':homepage+'/#organization'},
-      datePublished:'2026-11-27',dateModified:route.updated,
       image:[homepage+'/images/hero-mixed-lokma.webp'],
     }] : []),
     ...(!noindex && Astro.url.pathname!=='/' ? [{
