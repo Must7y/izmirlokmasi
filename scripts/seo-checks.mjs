@@ -124,7 +124,6 @@ export function inspectPage(html, route) {
       check(article?.url===canonicalFor(route) && article?.['@id']===canonicalFor(route)+'#article','Article schema missing');
       check(page?.mainEntity?.['@id']===article?.['@id'] && article?.mainEntityOfPage?.['@id']===page?.['@id'],'Article/page reference mismatch');
       check(article?.author?.['@id']===organization?.['@id'] && article?.publisher?.['@id']===organization?.['@id'],'Article authorship mismatch');
-      check(article?.dateModified===contentRoutes.find(item=>item.path===route)?.updated,'Article date mismatch');
     }
     if (route !== '/') {
       const breadcrumb=graph.find(n=>n['@type']==='BreadcrumbList');

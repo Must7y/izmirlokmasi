@@ -24,7 +24,8 @@
       scheduled = false;
       const range = document.documentElement.scrollHeight - window.innerHeight;
       const amount = range > 0 ? Math.max(0, Math.min(1, window.scrollY / range)) : 0;
-      progress.setAttribute('stroke-dashoffset', String(100 - amount * 100));
+      progress.setAttribute('y', String(72 * (1 - amount)));
+      progress.setAttribute('height', String(72 * amount));
     };
     const scheduleProgress = () => {
       if (!scheduled) { scheduled = true; window.requestAnimationFrame(renderProgress); }
