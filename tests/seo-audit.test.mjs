@@ -87,3 +87,36 @@ test('Sitemap declarations require an exact production URL and allow normal comm
   }
   assert.ok(inspectRobots('Sitemap: https://izmirlokmasi.com/sitemap.xml\nDisallow: /').errors.includes('Production crawling blocked'));
 });
+
+test('Production CLI verifies the revision, headers and redirect chain against an offline build',()=>{
+  const output=execFileSync(process.execPath,['--import','./tests/fixtures/mock-live.mjs',
+    'scripts/verify-live.mjs','https://izmirlokmasi.com','--expected-revision','a'.repeat(40),
+    '--cloudflare-baseline','--check-redirects'],{cwd:new URL('../',import.meta.url),encoding:'utf8'});
+  assert.match(output,/PASS published revision/);
+  assert.match(output,/Verification result: 0 failures/);
+});
+
+test('Business service links in the schema resolve to the emitted canonical service pages',async()=>{
+  const home=await readFile(new URL('../dist/index.html',import.meta.url),'utf8');
+  const schema=JSON.parse(home.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1]);
+  const organization=schema['@graph'].find(node=>node['@type']==='Organization');
+  assert.equal(organization.areaServed,'İstanbul ve çevre iller');
+  const website=schema['@graph'].find(node=>node['@type']==='WebSite');
+  assert.equal(website.hasPart.length,6);
+  for(const part of website.hasPart){
+    const url=new URL(part.url);
+    const page=await readFile(new URL('../dist'+url.pathname+'index.html',import.meta.url),'utf8');
+    assert.ok(page.includes('href="'+part.url+'"'));
+    assert.equal(part['@id'],part.url+'#webpage');
+  }
+});
+
+
+test('Order guide has visible authorship, valid article references and all navigation destinations',async()=>{
+ const guide=await readFile(new URL('../dist/lokma-siparisi-rehberi/index.html',import.meta.url),'utf8');
+ assert.deepEqual(inspectPage(guide,'/lokma-siparisi-rehberi/').errors,[]);
+ assert.match(guide,/<time datetime="2026-11-27">/);
+ assert.match(guide,/aria-current="page"[^>]*>Sipariş rehberi/);
+ const broken=guide.replace('"dateModified":"2026-11-27"','"dateModified":"2099-01-01"');
+ assert.ok(inspectPage(broken,'/lokma-siparisi-rehberi/').errors.includes('Article date mismatch'));
+});

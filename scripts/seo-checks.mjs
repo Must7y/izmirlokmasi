@@ -1,7 +1,8 @@
 // Bounded checks for our generated static HTML, not a general-purpose HTML parser.
-export const origin = 'https://izmirlokmasi.com';
-export const serviceRoutes = ['izmir-lokmasi', 'saray-lokmasi', 'hayir-lokmasi', 'mevlit-lokmasi'];
-export const indexableRoutes = ['/', ...serviceRoutes.map(route => `/${route}/`), '/iletisim/'];
+import {siteOrigin,contentRoutes} from '../src/data/routes.mjs';
+export const origin = siteOrigin;
+export const serviceRoutes = contentRoutes.filter(route=>route.service).map(route=>route.path.replaceAll('/',''));
+export const indexableRoutes = contentRoutes.filter(route=>route.indexable).map(route=>route.path);
 export const canonicalFor = route => new URL(route.replace(/\/?$/, '/'), origin).href;
 export const attributes = tag => Object.fromEntries([...tag.matchAll(/([\w:-]+)\s*=\s*(?:"([^"]*)"|'([^']*)')/g)].map(m => [m[1].toLowerCase(), m[2] ?? m[3]]));
 // Title contents are compared as text, never sanitized for insertion into HTML.
@@ -12,7 +13,49 @@ export function inspectRobots(text) {
   const declarations=lines.filter(line=>line.toLowerCase().startsWith('sitemap:')).map(line=>line.slice(line.indexOf(':')+1).trim());
   const errors=[];
   if(!declarations.some(url=>url===origin+'/sitemap.xml'))errors.push('Sitemap declaration missing or incorrect');
-  if(lines.some(line=>/^disallow:\s*\/\s*$/i.test(line)))errors.push('Production crawling blocked');
+  // Training-only blocks must not be confused with search crawler blocks.
+  // Select the most specific user-agent groups, merge equal matches, then
+  // apply longest-path precedence (Allow wins an equal-length tie).
+  const groups = [];
+  let group = {agents: [], rules: []};
+  for (const line of lines) {
+    const separator = line.indexOf(':');
+    if (separator < 0) continue;
+    const name = line.slice(0, separator).trim().toLowerCase();
+    const value = line.slice(separator + 1).trim();
+    if (name === 'user-agent') {
+      if (group.rules.length) { groups.push(group); group = {agents: [], rules: []}; }
+      group.agents.push(value.toLowerCase());
+    } else if (['allow', 'disallow'].includes(name)) {
+      if (!group.agents.length) group.agents.push('*');
+      group.rules.push({allow: name === 'allow', path: value});
+    }
+  }
+  groups.push(group);
+  const renderPaths = [...indexableRoutes, '/_astro/site.css', '/js/site.js', '/js/analytics.js',
+    '/images/lokma-real-appetizing.webp', '/images/saray-lokmasi-photo.webp', '/images/hero-mixed-lokma.webp'];
+  for (const agent of ['googlebot', 'googlebot-image', 'bingbot']) {
+    const candidates = groups.map(g => ({...g, specificity: Math.max(-1,
+      ...g.agents.map(a => a === '*' ? 0 : a && agent.includes(a) ? a.length : -1))}));
+    const specificity = Math.max(-1, ...candidates.map(g => g.specificity));
+    const rules = specificity < 0 ? [] : candidates.filter(g => g.specificity === specificity).flatMap(g => g.rules);
+    const blocked = renderPaths.filter(path => {
+      let winner;
+      for (const rule of rules) {
+        if (!rule.path) continue;
+        const end = rule.path.endsWith('$');
+        const pattern = (end ? rule.path.slice(0, -1) : rule.path).split('*')
+          .map(part => part.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('.*');
+        if (!new RegExp('^' + pattern + (end ? '$' : '')).test(path)) continue;
+        const length = Buffer.byteLength(rule.path.replace(/[*$]/g, ''));
+        if (!winner || length > winner.length || (length === winner.length && rule.allow)) winner = {...rule, length};
+      }
+      return winner && !winner.allow;
+    });
+    if (blocked.length) errors.push(`Production crawling blocked: ${agent} ${blocked.join(', ')}`);
+  }
+  // Keep the existing aggregate signal for callers and logs.
+  if (errors.some(error => error.startsWith('Production crawling blocked:'))) errors.push('Production crawling blocked');
   return {errors};
 }
 
@@ -75,6 +118,13 @@ export function inspectPage(html, route) {
       check(service?.url === canonicalFor(route) && Boolean(service?.name), 'Service schema missing');
       check(service?.provider?.['@id'] === organization?.['@id'], 'Service provider mismatch');
       check(page?.mainEntity?.['@id'] === service?.['@id'], 'Service/page reference mismatch');
+    }
+    if (contentRoutes.find(item=>item.path===route)?.article) {
+      const article=graph.find(node=>node['@type']==='Article');
+      check(article?.url===canonicalFor(route) && article?.['@id']===canonicalFor(route)+'#article','Article schema missing');
+      check(page?.mainEntity?.['@id']===article?.['@id'] && article?.mainEntityOfPage?.['@id']===page?.['@id'],'Article/page reference mismatch');
+      check(article?.author?.['@id']===organization?.['@id'] && article?.publisher?.['@id']===organization?.['@id'],'Article authorship mismatch');
+      check(article?.dateModified===contentRoutes.find(item=>item.path===route)?.updated,'Article date mismatch');
     }
     if (route !== '/') {
       const breadcrumb=graph.find(n=>n['@type']==='BreadcrumbList');

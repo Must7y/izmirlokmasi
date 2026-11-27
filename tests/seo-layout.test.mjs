@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile,stat} from 'node:fs/promises';
 const read=async p=>readFile(new URL('../'+p,import.meta.url),'utf8');
-test('altbilgi sade, menü kaldırıldı, gizlilik ve hizmet sayfaları korundu', async()=>{
+test('altbilgi sade, gezinme menüsü, gizlilik ve hizmet sayfaları korundu', async()=>{
  const layout=await read('src/layouts/Layout.astro');
  assert.match(layout,/footer-minimal/);
  assert.doesNotMatch(layout,/footer-links|desktop-nav|mobile-nav/);
@@ -13,7 +13,7 @@ test('altbilgi sade, menü kaldırıldı, gizlilik ve hizmet sayfaları korundu'
 test('SEO: meta, canonical, OG, Twitter, Organization ve WebSite yapısı korunur',async()=>{
  const layout=await read('src/layouts/Layout.astro');
  for (const token of ['rel="canonical"','name="description"','og:site_name','og:image:width','og:image:height','twitter:title','twitter:image',"'@type':'Organization'","'@type':'WebSite'"]) assert.ok(layout.includes(token),token);
- assert.match(await read('src/pages/sitemap.xml.ts'),/services.map/);
+ assert.match(await read('src/pages/sitemap.xml.ts'),/contentRoutes.filter/);
  assert.match(await read('src/pages/robots.txt.ts'),/Sitemap/);
  assert.doesNotMatch(layout,/aggregateRating|streetAddress|openingHours/);
 });

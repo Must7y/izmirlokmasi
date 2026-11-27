@@ -19,7 +19,7 @@ function browser({saved = null, hostname = 'izmirlokmasi.com', blocked = false} 
   return {window, scripts, handlers, cookies, status, clearStorage: () => {saved = null;}, reloaded: () => reloaded};
 }
 test('fresh, denied, expired and unavailable storage never load Google', () => {
-  for (const saved of [null, 'bad json', JSON.stringify({choice: 'denied', at: Date.now()}), JSON.stringify({choice: 'granted', at: 0})]) {
+  for (const saved of [null, 'bad json', JSON.stringify({choice: 'denied', at: Date.now()}), JSON.stringify({choice: 'granted', at: 0}), JSON.stringify({choice:'granted',at:Date.now()+86400000}), JSON.stringify({choice:'granted',at:String(Date.now())})]) {
     const b = browser({saved}); assert.equal(b.scripts.length, 0); assert.equal(b.window['ga-disable-G-REPV5VHRCZ'], true);
   }
 });
