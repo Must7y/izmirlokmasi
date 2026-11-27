@@ -16,3 +16,14 @@ test('External URLs, traversal, missing assets and symlinks cannot enter sealed 
  for(const url of ['https://evil.example/a.js','//evil.example/a.js','/../secret.js','/%2e%2e/secret.js','/missing.js']){await writeFile(path.join(root,'index.html'),`<script src="${url}"></script>`);await assert.rejects(sealRelease(root));}
  await symlink(path.join(root,'js/site.js'),path.join(root,'linked.js'));await assert.rejects(sealRelease(root),/Symbolic links/);
 });
+
+
+test('Changed client files receive a new content version; resealing unchanged files is stable',async t=>{
+ const root=await fixture(t);await sealRelease(root);
+ const before=await readFile(path.join(root,'index.html'),'utf8');
+ assert.match(before,/site\.js\?v=[a-f0-9]{12}/);
+ await sealRelease(root);assert.equal(await readFile(path.join(root,'index.html'),'utf8'),before);
+ await writeFile(path.join(root,'js/site.js'),'console.log("new release")');await sealRelease(root);
+ const after=await readFile(path.join(root,'index.html'),'utf8');
+ assert.notEqual(after.match(/site\.js\?v=[a-f0-9]{12}/)[0],before.match(/site\.js\?v=[a-f0-9]{12}/)[0]);
+});

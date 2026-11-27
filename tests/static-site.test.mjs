@@ -8,7 +8,7 @@ test('all public routes, canonical and contact links work in static output',asyn
 for(const route of routes){let html;try{html=await readFile(file(route),'utf8')}catch{html=await readFile(new URL('../dist/'+route+'.html',import.meta.url),'utf8')}
 assert.match(html,/<html lang="tr">/);assert.match(html,/rel="canonical"/);assert.match(html,/https:\/\/wa.me\/905306902501/);assert.doesNotMatch(html,/lokma-3d-hero|lokma-3d-cluster/);
 assert.doesNotMatch(html,/<style\b/i,'CSP inline style engeli');
-assert.match(html,/src="\/js\/site\.js"/,'galeri/menü betiği kaynakta bulunmalı');
+assert.match(html,/src="\/js\/site\.js\?v=[a-f0-9]{12}"/,'galeri/menü betiği kaynakta bulunmalı');
 for(const [,src] of html.matchAll(/(?:src|href)="(\/[^"#?]*)/g)){if(src.startsWith('/_astro/')||src.startsWith('/images/')||src.startsWith('/js/')||src.startsWith('/icons/')||['/favicon.svg','/favicon.png','/favicon.ico','/apple-touch-icon.png'].includes(src))await access(new URL('../dist'+src,import.meta.url));else assert.ok(routes.includes(src.replace(/^\/|\/$/g,'')),src)}
 }});
 test('sitemap and restrictive header configuration are generated',async()=>{const xml=await readFile(new URL('../dist/sitemap.xml',import.meta.url),'utf8');assert.match(xml,/<urlset/);assert.doesNotMatch(xml,/gizlilik/);const headers=await readFile(new URL('../dist/_headers',import.meta.url),'utf8');assert.match(headers,/frame-ancestors 'none'/);});
