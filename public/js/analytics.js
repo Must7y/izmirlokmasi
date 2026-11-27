@@ -8,7 +8,8 @@
   const read = () => {
     try {
       const saved = JSON.parse(localStorage.getItem(key));
-      return saved && Date.now() - saved.at < lifetime && saved.choice === 'granted';
+      const age = saved && Date.now() - saved.at;
+      return saved && Number.isFinite(saved.at) && age >= 0 && age < lifetime && saved.choice === 'granted';
     } catch { return false; }
   };
   const clearCookies = () => {

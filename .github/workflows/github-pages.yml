@@ -19,6 +19,8 @@ jobs:
     steps:
       - name: Depoyu al
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
       - name: Uyumlu Node.js kur
         uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
@@ -59,10 +61,12 @@ jobs:
     timeout-minutes: 8
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: '22.23.4'
       - name: Yayinlanan commit ve canli SEO kurallarini dogrula
         env:
           EXPECTED_REVISION: ${{ github.sha }}
-        run: node scripts/verify-live.mjs https://izmirlokmasi.com --expected-revision "$EXPECTED_REVISION"
+        run: node scripts/verify-live.mjs https://izmirlokmasi.com --cloudflare-baseline --check-redirects --expected-revision "$EXPECTED_REVISION"

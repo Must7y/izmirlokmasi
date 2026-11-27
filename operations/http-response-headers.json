@@ -1,5 +1,5 @@
 {
-  "status": "prepared_not_active_on_github_pages",
+  "status": "target_policy_not_fully_applied_at_cloudflare",
   "scope": "izmirlokmasi.com and www.izmirlokmasi.com responses over HTTPS",
   "initial_hsts": "max-age=300",
   "after_tls_and_redirect_verification_hsts": "max-age=15768000",
@@ -8,7 +8,7 @@
     "X-Frame-Options": "DENY",
     "X-Content-Type-Options": "nosniff",
     "Referrer-Policy": "strict-origin-when-cross-origin",
-    "Permissions-Policy": "camera=(), microphone=(), geolocation=()"
+    "Permissions-Policy": "camera=(), microphone=()"
   },
   "notes": [
     "These must be actual HTTP response headers; HTML meta tags cannot implement HSTS, nosniff or frame-ancestors.",

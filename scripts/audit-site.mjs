@@ -18,7 +18,14 @@ for (const route of routes) {
     let filename = path.resolve(root, '.' + decodeURIComponent(local.pathname));
     if (filename !== path.resolve(root) && !filename.startsWith(root)) { result.errors.push(`Asset outside build: ${href}`); continue; }
     if (!path.extname(filename)) filename = path.join(filename, 'index.html');
-    try { await access(filename); } catch { result.errors.push(`Broken local link: ${href}`); }
+    try {
+      await access(filename);
+      if (local.hash && filename.endsWith('.html')) {
+        const target = await readFile(filename, 'utf8');
+        const ids = [...target.matchAll(/\bid\s*=\s*(?:"([^"]*)"|'([^']*)')/gi)].map(m=>m[1] ?? m[2]);
+        if (!ids.includes(decodeURIComponent(local.hash.slice(1)))) result.errors.push(`Broken local fragment: ${href}`);
+      }
+    } catch { result.errors.push(`Broken local link: ${href}`); }
   }
   pages.push(result);
 }
