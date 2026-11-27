@@ -4,6 +4,7 @@ import '../styles/site.css';
 import {whatsapp as defaultWhatsapp,whatsappForService} from '../data/site';
 import SocialIcon from '../components/SocialIcon.astro';
 import SiteMenu from '../components/SiteMenu.astro';
+import ScrollDock from '../components/ScrollDock.astro';
 import {contentRoutes,routeFor} from '../data/routes.mjs';
 const {title='İstanbul Lokma Siparişi ve İzmir Lokması | Hanifi Usta',description='İstanbul ve çevre illerde lokma siparişi, hayır lokması döktürme ve mevlit ikramı için Hanifi Usta ile görüşün. İzmir veya saray lokması için teklif alın.',noindex=false,service}=Astro.props;
 const whatsapp=service?whatsappForService(service.name):defaultWhatsapp;
@@ -82,7 +83,7 @@ const schema={
   <meta name="twitter:image" content="https://izmirlokmasi.com/images/og-hanifi-usta.webp"/>
   <script type="application/ld+json" set:html={JSON.stringify(schema).replace(/</g,'\\u003c')}/>
 </head>
-<body>
+<body id="sayfa-basi">
 <a class="skip" href="#main">İçeriğe geç</a>
 <div class="top-note"><span>HAYIR • MEVLİT • ÖZEL GÜN LOKMASI</span><a href={whatsapp} target="_top" aria-label="Tarihinizi birlikte planlayalım: WhatsApp üzerinden bilgi alın">Tarihinizi birlikte planlayalım <ArrowIcon/></a></div>
 <header class="header">
@@ -91,13 +92,12 @@ const schema={
     <span>Hanifi Usta<small>MEŞHUR İZMİR LOKMACISI</small></span>
   </a>
   <SiteMenu/>
-  <a class="button button-header" href={whatsapp} target="_top"><img class="wa-icon" src="/icons/whatsapp.svg" alt="" width="21" height="21"/> WhatsApp’tan yazın</a>
 </header>
 <slot/>
 <footer class="footer footer-minimal"><div class="footer-identity"><a class="footer-word" href="/">Hanifi Usta</a><span>Lokmanın en güzel yanı, paylaşılması.</span></div><div class="footer-meta"><span>© {new Date().getFullYear()} Hanifi Usta</span><a href="/iletisim/">İletişim</a><a href="/gizlilik/">Gizlilik ve görsel bilgileri</a>
   {socialProfiles.map(profile => <a class="social-link" href={profile.url}><SocialIcon name={profile.name}/>{profile.name}</a>)}
   <a class="social-link" href={facebookShareUrl}><SocialIcon name="Facebook"/>Facebook</a></div><details class="analytics-preference"><summary>İstatistik tercihi</summary><p>Ziyaret edilen sayfaları ve iletişim bağlantısı tıklamalarını Google Analytics ile ölçmemize izin verebilirsiniz. İzin verene kadar Google Analytics yüklenmez. Tercihinizi buradan değiştirebilirsiniz. <a href="/gizlilik/#istatistik">Ayrıntılar</a></p><p id="analytics-status" role="status">Ziyaret istatistiği kapalı.</p><div class="analytics-actions"><button type="button" data-analytics-choice="granted" hidden>İzin ver</button><button type="button" data-analytics-choice="denied" hidden>Kapalı tut</button></div><noscript>JavaScript kapalı olduğundan istatistik toplanmaz.</noscript></details></footer>
-<a class="floating-wa" href={whatsapp} target="_top" aria-label="Hanifi Usta’ya WhatsApp’tan yazın"><img class="wa-icon" src="/icons/whatsapp.svg" alt="" width="21" height="21"/><span>WhatsApp’tan yazın</span><ArrowIcon/></a>
+<ScrollDock whatsapp={whatsapp}/>
 <script is:inline src="/js/site.js" defer></script>
 <script is:inline src="/js/analytics.js" defer></script>
 </body></html>

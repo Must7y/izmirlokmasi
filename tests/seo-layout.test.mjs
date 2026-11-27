@@ -7,7 +7,8 @@ test('altbilgi sade, gezinme menüsü, gizlilik ve hizmet sayfaları korundu', a
  assert.match(layout,/footer-minimal/);
  assert.doesNotMatch(layout,/footer-links|desktop-nav|mobile-nav/);
  assert.match(layout,/href="\/gizlilik\/"/);
- assert.match(layout,/src="\/icons\/whatsapp.svg"/);
+ assert.match(await read('src/components/ScrollDock.astro'),/src="\/icons\/whatsapp.svg"/);
+ assert.doesNotMatch(layout,/class="button button-header"/);
  for(const page of ['src/pages/[service].astro','src/pages/iletisim.astro','src/pages/gizlilik.astro'])assert.ok((await read(page)).length>100);
 });
 test('SEO: meta, canonical, OG, Twitter, Organization ve WebSite yapısı korunur',async()=>{
