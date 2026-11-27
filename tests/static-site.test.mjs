@@ -1,7 +1,8 @@
 import {readFile,access} from 'node:fs/promises';
 import test from 'node:test';
 import assert from 'node:assert/strict';
-const routes=['','izmir-lokmasi','saray-lokmasi','hayir-lokmasi','mevlit-lokmasi','iletisim','gizlilik'];
+import {contentRoutes} from '../src/data/routes.mjs';
+const routes=contentRoutes.map(route=>route.path.replace(/^\/|\/$/g,''));
 const file=r=>new URL('../dist/'+(r?r+'/':'')+'index.html',import.meta.url);
 test('all public routes, canonical and contact links work in static output',async()=>{
 for(const route of routes){let html;try{html=await readFile(file(route),'utf8')}catch{html=await readFile(new URL('../dist/'+route+'.html',import.meta.url),'utf8')}

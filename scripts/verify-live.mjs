@@ -1,6 +1,6 @@
 // Read-only production verification: no probing flood; static content only.
 import {securityHeaderGaps, baselineSecurityHeaderGaps} from './security-headers.mjs';
-import {inspectPage, inspectSitemap, inspectRobots, origin} from './seo-checks.mjs';
+import {inspectPage, inspectSitemap, inspectRobots, origin, indexableRoutes} from './seo-checks.mjs';
 import {fetchSite, responseIndexingGaps, redirectChecks} from './live-policy.mjs';
 const base = new URL(process.argv[2] || 'https://izmirlokmasi.com');
 const cloudflareHeaders = process.argv.includes('--cloudflare-headers') || process.argv.includes('--require-security-headers');
@@ -10,7 +10,7 @@ const expectedRevision=revisionIndex===-1?null:process.argv[revisionIndex+1];
 if (revisionIndex!==-1 && !/^[a-f0-9]{40}$/.test(expectedRevision||'')) throw new Error('Expected revision must be a full commit SHA');
 if (base.protocol !== 'https:' || !base.hostname) throw new Error('Verified HTTPS host is required');
 if (base.origin !== origin || base.username || base.password || base.pathname !== '/' || base.search || base.hash) throw new Error('Only the configured production origin can be verified');
-const routes = ['/', '/izmir-lokmasi/', '/saray-lokmasi/','/hayir-lokmasi/','/mevlit-lokmasi/','/iletisim/','/gizlilik/'];
+const routes = [...indexableRoutes, '/gizlilik/'];
 const assets = ['/robots.txt','/sitemap.xml','/js/site.js','/js/analytics.js','/icons/arrow-up-right.svg','/images/lokma-real-appetizing.webp','/favicon.svg','/favicon.png','/favicon.ico','/apple-touch-icon.png'];
 const unknown = ['/__izmir_missing_check_2026__','/.env','/.git/config','/package.json'];
 let failures = 0; let warnings = 0;

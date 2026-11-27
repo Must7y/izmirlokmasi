@@ -1,7 +1,8 @@
 // Bounded checks for our generated static HTML, not a general-purpose HTML parser.
-export const origin = 'https://izmirlokmasi.com';
-export const serviceRoutes = ['izmir-lokmasi', 'saray-lokmasi', 'hayir-lokmasi', 'mevlit-lokmasi'];
-export const indexableRoutes = ['/', ...serviceRoutes.map(route => `/${route}/`), '/iletisim/'];
+import {siteOrigin,contentRoutes} from '../src/data/routes.mjs';
+export const origin = siteOrigin;
+export const serviceRoutes = contentRoutes.filter(route=>route.service).map(route=>route.path.replaceAll('/',''));
+export const indexableRoutes = contentRoutes.filter(route=>route.indexable).map(route=>route.path);
 export const canonicalFor = route => new URL(route.replace(/\/?$/, '/'), origin).href;
 export const attributes = tag => Object.fromEntries([...tag.matchAll(/([\w:-]+)\s*=\s*(?:"([^"]*)"|'([^']*)')/g)].map(m => [m[1].toLowerCase(), m[2] ?? m[3]]));
 // Title contents are compared as text, never sanitized for insertion into HTML.
@@ -117,6 +118,13 @@ export function inspectPage(html, route) {
       check(service?.url === canonicalFor(route) && Boolean(service?.name), 'Service schema missing');
       check(service?.provider?.['@id'] === organization?.['@id'], 'Service provider mismatch');
       check(page?.mainEntity?.['@id'] === service?.['@id'], 'Service/page reference mismatch');
+    }
+    if (contentRoutes.find(item=>item.path===route)?.article) {
+      const article=graph.find(node=>node['@type']==='Article');
+      check(article?.url===canonicalFor(route) && article?.['@id']===canonicalFor(route)+'#article','Article schema missing');
+      check(page?.mainEntity?.['@id']===article?.['@id'] && article?.mainEntityOfPage?.['@id']===page?.['@id'],'Article/page reference mismatch');
+      check(article?.author?.['@id']===organization?.['@id'] && article?.publisher?.['@id']===organization?.['@id'],'Article authorship mismatch');
+      check(article?.dateModified===contentRoutes.find(item=>item.path===route)?.updated,'Article date mismatch');
     }
     if (route !== '/') {
       const breadcrumb=graph.find(n=>n['@type']==='BreadcrumbList');

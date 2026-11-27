@@ -25,3 +25,7 @@ Ayrıntılı rapor dosyaları Actions yapıtı olarak yüklenmez. Açık depodak
 - Cloudflare WAF yalnızca proxied alan adına gelen trafiği korur. Herkese açık GitHub Pages alternatif adresi için kaynak sunucuda Cloudflare dışı erişimi engelleme yetkisi yoktur. robots.txt bir güvenlik sınırı değildir; User-Agent adıyla izin vermek bot kimliğini doğrulamaz.
 
 Kaynaklar: [Cloudflare Response Header Rules](https://developers.cloudflare.com/rules/transform/response-header-modification/create-api/), [Google robots.txt grupları](https://developers.google.com/crawling/docs/robots-txt/robots-txt-spec), [Google AI arama ve SEO](https://developers.google.com/search/docs/appearance/ai-features).
+
+## Yayın bütünlüğü
+
+Derleme, yerel JavaScript ve CSS bağlantılarına SHA-384 SRI ekler. Tarayıcı dosya içeriğini bu değerle karşılaştırır. `release-manifest.json` derlenmiş dosyaların özetlerini içerir; `npm run verify:release` dosya değişikliği, ekleme ve silmeyi dağıtım öncesinde reddeder. Bu kontrol dijital imza değildir; HTML ile manifestin birlikte değiştirilmesine veya GitHub hesabının ele geçirilmesine karşı güvence vermez. Cloudflare'ın JavaScript/CSS içeriğini değiştiren özellikleri SRI ile uyuşmazlık yaratabilir; yayın sonrasında varlık yüklemeleri doğrulanmalıdır.

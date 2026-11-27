@@ -1,11 +1,14 @@
 ---
 import ArrowIcon from '../components/ArrowIcon.astro';
 import '../styles/site.css';
-import {whatsapp as defaultWhatsapp,whatsappForService,services} from '../data/site';
+import {whatsapp as defaultWhatsapp,whatsappForService} from '../data/site';
 import SocialIcon from '../components/SocialIcon.astro';
+import SiteMenu from '../components/SiteMenu.astro';
+import {contentRoutes,routeFor} from '../data/routes.mjs';
 const {title='İstanbul Lokma Siparişi ve İzmir Lokması | Hanifi Usta',description='İstanbul ve çevre illerde lokma siparişi, hayır lokması döktürme ve mevlit ikramı için Hanifi Usta ile görüşün. İzmir veya saray lokması için teklif alın.',noindex=false,service}=Astro.props;
 const whatsapp=service?whatsappForService(service.name):defaultWhatsapp;
 const canonical=new URL(Astro.url.pathname.replace(/\/?$/, '/'), Astro.site);
+const route = routeFor(canonical.pathname);
 const homepage='https://izmirlokmasi.com';
 const socialProfiles = [
   { name: 'Instagram', url: 'https://www.instagram.com/hanifiusta008/' },
@@ -16,24 +19,33 @@ const schema={
   '@context':'https://schema.org',
   '@graph':[
     {'@type':'Organization','@id':homepage+'/#organization',name:'İzmir Lokmacısı Hanifi Usta',url:homepage,logo:homepage+'/images/hanifi-logo-vector-integrated.webp',telephone:'+905306902501',email:'izmirlokmasii@gmail.com',areaServed:'İstanbul ve çevre iller',contactPoint:{'@type':'ContactPoint',telephone:'+905306902501',contactType:'customer service',availableLanguage:'Turkish'},sameAs:socialProfiles.map(profile => profile.url)},
-    {'@type':'WebSite','@id':homepage+'/#website',url:homepage,name:'Hanifi Usta · Meşhur İzmir Lokmacısı',alternateName:'İzmir Lokmacısı Hanifi Usta',inLanguage:'tr-TR',publisher:{'@id':homepage+'/#organization'},hasPart:services.map(item=>({'@type':'WebPage','@id':homepage+'/'+item.slug+'/#webpage',url:homepage+'/'+item.slug+'/',name:item.name}))},
+    {'@type':'WebSite','@id':homepage+'/#website',url:homepage,name:'Hanifi Usta · Meşhur İzmir Lokmacısı',alternateName:'İzmir Lokmacısı Hanifi Usta',inLanguage:'tr-TR',publisher:{'@id':homepage+'/#organization'},hasPart:contentRoutes.filter(item=>item.indexable&&item.path!=='/').map(item=>({'@type':item.kind,'@id':homepage+item.path+'#webpage',url:homepage+item.path,name:item.label}))},
     ...(!noindex ? [{
-      '@type':Astro.url.pathname.replace(/\/$/,'')==='/iletisim'?'ContactPage':'WebPage',
+      '@type':route?.kind || 'WebPage',
       '@id':canonical.href+'#webpage',url:canonical.href,name:title,description,
       inLanguage:'tr-TR',isPartOf:{'@id':homepage+'/#website'},
       ...(Astro.url.pathname!=='/'?{breadcrumb:{'@id':canonical.href+'#breadcrumb'}}:{}),
-      ...(service?{mainEntity:{'@id':canonical.href+'#service'}}:{about:{'@id':homepage+'/#organization'}})
+      ...(service?{mainEntity:{'@id':canonical.href+'#service'}}:route?.article?{mainEntity:{'@id':canonical.href+'#article'}}:{about:{'@id':homepage+'/#organization'}})
     }] : []),
     ...(service && !noindex ? [{
       '@type':'Service','@id':canonical.href+'#service',url:canonical.href,
       name:service.name,description:service.body,serviceType:service.name,areaServed:'İstanbul ve çevre iller',
       provider:{'@id':homepage+'/#organization'}
     }] : []),
+    ...(route?.article && !noindex ? [{
+      '@type':'Article','@id':canonical.href+'#article',headline:title.replace(/ \| Hanifi Usta$/,''),
+      description,inLanguage:'tr-TR',url:canonical.href,
+      mainEntityOfPage:{'@id':canonical.href+'#webpage'},
+      author:{'@type':'Organization','@id':homepage+'/#organization',name:'Hanifi Usta',url:homepage+'/'},
+      publisher:{'@id':homepage+'/#organization'},
+      datePublished:'2026-11-27',dateModified:route.updated,
+      image:[homepage+'/images/hero-mixed-lokma.webp'],
+    }] : []),
     ...(!noindex && Astro.url.pathname!=='/' ? [{
       '@type':'BreadcrumbList','@id':canonical.href+'#breadcrumb',
       itemListElement:[
         {'@type':'ListItem',position:1,name:'Hanifi Usta',item:homepage+'/'},
-        {'@type':'ListItem',position:2,name:service?.name||'İletişim',item:canonical.href}
+        {'@type':'ListItem',position:2,name:route?.label||service?.name||'İletişim',item:canonical.href}
       ]
     }] : [])
   ]
@@ -78,6 +90,7 @@ const schema={
     <img src="/images/hanifi-logo-vector-integrated.webp" width="72" height="72" alt=""/>
     <span>Hanifi Usta<small>MEŞHUR İZMİR LOKMACISI</small></span>
   </a>
+  <SiteMenu/>
   <a class="button button-header" href={whatsapp} target="_top"><img class="wa-icon" src="/icons/whatsapp.svg" alt="" width="21" height="21"/> WhatsApp’tan yazın</a>
 </header>
 <slot/>

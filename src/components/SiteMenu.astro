@@ -1,0 +1,10 @@
+---
+import {contentRoutes} from '../data/routes.mjs';
+const current = Astro.url.pathname.replace(/\/?$/, '/');
+---
+<details class="site-menu">
+  <summary>Menü <span aria-hidden="true">+</span></summary>
+  <nav aria-label="Ana gezinme">
+    <ul>{contentRoutes.filter(route=>route.indexable).map(route=><li><a href={route.path} aria-current={current===route.path?'page':undefined}>{route.label}</a></li>)}</ul>
+  </nav>
+</details>
