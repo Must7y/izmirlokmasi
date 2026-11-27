@@ -18,7 +18,20 @@ const {whatsapp=defaultWhatsapp}=Astro.props;
     <span class="dock-hint">Lokmaya dokun, başa dön</span>
   </a>
   <a class="floating-wa" href={whatsapp} target="_top" aria-label="Hanifi Usta’ya WhatsApp’tan yazın">
-    <img src="/icons/whatsapp.svg" alt="" width="25" height="25"/>
+    <svg class="wa-seal" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+      <defs>
+        <linearGradient id="wa-gilt" x1="7" y1="5" x2="56" y2="61" gradientUnits="userSpaceOnUse"><stop stop-color="#fff1c5"/><stop offset=".23" stop-color="#bd853b"/><stop offset=".47" stop-color="#f1cf86"/><stop offset=".74" stop-color="#98602b"/><stop offset="1" stop-color="#e3b768"/></linearGradient>
+        <radialGradient id="wa-enamel" cx="0" cy="0" r="1" gradientTransform="translate(23 16) rotate(67) scale(48)" gradientUnits="userSpaceOnUse"><stop stop-color="#87494b"/><stop offset=".48" stop-color="#59262d"/><stop offset="1" stop-color="#2f151d"/></radialGradient>
+        <linearGradient id="wa-reflection" x1="16" y1="10" x2="45" y2="52" gradientUnits="userSpaceOnUse"><stop stop-color="#fff8db" stop-opacity=".62"/><stop offset=".5" stop-color="#fff8db" stop-opacity="0"/></linearGradient>
+      </defs>
+      <path class="wa-foundry" d="M32 3C37 1 41 6 45 7C50 7 53 11 54 16C59 19 61 23 59 28C63 33 61 38 57 41C57 47 53 51 48 52C45 58 40 59 35 58C30 62 25 60 21 57C15 58 11 54 10 49C4 47 3 42 5 37C1 32 3 27 6 23C5 17 9 13 14 12C17 6 22 5 27 6C28 4 30 3 32 3Z" fill="url(#wa-gilt)"/>
+      <circle cx="32" cy="32" r="24" fill="#713632"/>
+      <circle class="wa-enamel" cx="32" cy="31" r="22.6" fill="url(#wa-enamel)"/>
+      <path d="M14 28C16 15 29 9 41 15" stroke="url(#wa-reflection)" stroke-width="1.3" stroke-linecap="round"/>
+      <path d="M23 51C35 57 49 47 51 37" stroke="#d8a45b" stroke-opacity=".38" stroke-width=".7" stroke-linecap="round"/>
+    </svg>
+    <span class="wa-light" aria-hidden="true"></span>
+    <img class="wa-brand" src="/icons/whatsapp.svg" alt="" width="25" height="25"/>
     <span class="dock-hint">Hanifi Usta’ya yazın</span>
   </a>
 </aside>
