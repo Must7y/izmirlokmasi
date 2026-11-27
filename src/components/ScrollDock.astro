@@ -1,0 +1,23 @@
+---
+import {whatsapp as defaultWhatsapp} from '../data/site';
+const {whatsapp=defaultWhatsapp}=Astro.props;
+---
+<aside class="contact-dock" aria-label="Hızlı erişim">
+  <a class="lokma-top" href="#sayfa-basi" aria-label="Sayfanın başına dön">
+    <svg class="lokma-medallion" viewBox="0 0 72 72" fill="none" aria-hidden="true">
+      <defs>
+        <linearGradient id="lokma-gold" x1="12" y1="9" x2="58" y2="64" gradientUnits="userSpaceOnUse"><stop stop-color="#f7dd9c"/><stop offset=".42" stop-color="#d89a42"/><stop offset="1" stop-color="#96521f"/></linearGradient>
+      </defs>
+      <path class="lokma-rim" d="M36 9C51 8 63 20 63 35C65 50 52 63 37 63C21 65 8 52 9 37C7 21 20 8 36 9Z"/>
+      <circle class="lokma-fill" data-scroll-progress cx="36" cy="36" r="26" pathLength="100" stroke-dasharray="100" stroke-dashoffset="100" transform="rotate(-90 36 36)"/>
+      <path class="lokma-glaze" d="M17 29C19 19 26 15 34 15"/>
+      <path class="lokma-up" d="M36 45V27M29 34L36 27L43 34"/>
+    </svg>
+    <span class="top-caption">Başa dön</span>
+  </a>
+  <a class="floating-wa" href={whatsapp} target="_top" aria-label="Hanifi Usta’ya WhatsApp’tan yazın">
+    <span class="dock-wa-symbol"><img src="/icons/whatsapp.svg" alt="" width="26" height="26"/></span>
+    <span class="dock-wa-copy"><small>HANİFİ USTA · WHATSAPP</small><span>Birlikte planlayalım</span></span>
+    <svg class="dock-wa-arrow" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 19L19 5M6 5H19V18"/></svg>
+  </a>
+</aside>

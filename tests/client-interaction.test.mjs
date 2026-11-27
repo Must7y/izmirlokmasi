@@ -37,3 +37,15 @@ test('floating contact leaves footer controls unobstructed when footer becomes v
  notify([{isIntersecting:true}]);assert.equal(floating.hidden,true);
  notify([{isIntersecting:false}]);assert.equal(floating.hidden,false);
 });
+
+test('lokma progress clamps overscroll, coalesces scroll events and survives short pages',()=>{
+ const handlers=new Map();const frames=[];let offset;
+ const progress={setAttribute(name,value){assert.equal(name,'stroke-dashoffset');offset=Number(value);}};
+ const document={documentElement:{scrollHeight:2400},querySelector:s=>s==='[data-scroll-progress]'?progress:null,querySelectorAll:()=>[],getElementById:()=>null};
+ const window={innerHeight:800,scrollY:0,matchMedia:()=>({matches:true}),addEventListener:(name,fn)=>handlers.set(name,fn),requestAnimationFrame:fn=>frames.push(fn)};
+ vm.runInNewContext(source,{document,window});assert.equal(offset,100);
+ window.scrollY=800;handlers.get('scroll')();handlers.get('scroll')();assert.equal(frames.length,1);frames.shift()();assert.equal(offset,50);
+ window.scrollY=3000;handlers.get('scroll')();frames.shift()();assert.equal(offset,0);
+ window.scrollY=-100;handlers.get('scroll')();frames.shift()();assert.equal(offset,100);
+ document.documentElement.scrollHeight=300;handlers.get('resize')();frames.shift()();assert.equal(offset,100);
+});

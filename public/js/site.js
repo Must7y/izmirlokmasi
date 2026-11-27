@@ -17,6 +17,25 @@
     });
   }
 
+  const progress = document.querySelector('[data-scroll-progress]');
+  if (progress) {
+    let scheduled = false;
+    const renderProgress = () => {
+      scheduled = false;
+      const range = document.documentElement.scrollHeight - window.innerHeight;
+      const amount = range > 0 ? Math.max(0, Math.min(1, window.scrollY / range)) : 0;
+      progress.setAttribute('stroke-dashoffset', String(100 - amount * 100));
+    };
+    const scheduleProgress = () => {
+      if (!scheduled) { scheduled = true; window.requestAnimationFrame(renderProgress); }
+    };
+    window.addEventListener('scroll', scheduleProgress, { passive: true });
+    window.addEventListener('resize', scheduleProgress, { passive: true });
+    window.addEventListener('pageshow', scheduleProgress);
+    window.addEventListener('load', scheduleProgress);
+    renderProgress();
+  }
+
   const footer = document.querySelector('footer');
   const floating = document.querySelector('.floating-wa');
   if (footer && floating && 'IntersectionObserver' in window) {
