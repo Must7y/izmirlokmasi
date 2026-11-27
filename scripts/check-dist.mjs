@@ -16,7 +16,7 @@ for(const script of index.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)){
   const attrs=script[1] || '';
   if(!/\bsrc=|type=['"]application\/ld\+json['"]/.test(attrs)) throw new Error('HTML içinde satır içi JS var: sıkı CSP ile uyumsuz');
 }
-if(!index.includes('src="/js/site.js"')) throw new Error('Galeri ve menü JS kaynağı eksik');
+if(!/src="\/js\/site\.js\?v=[a-f0-9]{12}"/.test(index)) throw new Error('Galeri ve menü JS kaynağı eksik');
 if (!/İzmir|lokma/i.test(index))throw new Error('Ana sayfa içeriği eksik');
 console.log(JSON.stringify({status:'PASS',files:records.length,bytes:records.reduce((a,r)=>a+r.bytes,0),sizes,budget},null,2));
 

@@ -15,6 +15,11 @@ async function filesIn(root, directory=root) {
   return files.sort();
 }
 function localAsset(value) {
+  if (value.includes('?')) {
+    const [pathname, query, extra] = value.split('?');
+    if (extra !== undefined || !/^v=[a-f0-9]{12}$/.test(query)) throw new Error('Invalid asset version');
+    value = pathname;
+  }
   if(!/^\/(?!\/)[A-Za-z0-9_./-]+$/.test(value) || value.split('/').some(part=>part==='.'||part==='..')) throw new Error('Invalid local executable asset URL');
   return value.slice(1);
 }
@@ -31,8 +36,10 @@ export async function sealRelease(root) {
       if(!value) {if(isScript&&/type="application\/ld\+json"/.test(tag))continue;throw new Error('Missing executable asset URL');}
       const asset=localAsset(value);
       if(!files.includes(asset)) throw new Error('Missing executable asset: '+asset);
-      const integrity=digest(await readFile(path.join(root,asset)));
-      const clean=tag.replace(/\s+(?:integrity|crossorigin)="[^"]*"/g,'');
+      const bytes=await readFile(path.join(root,asset));
+      const integrity=digest(bytes);
+      const version=createHash('sha256').update(bytes).digest('hex').slice(0,12);
+      const clean=tag.replace(/\s+(?:integrity|crossorigin)="[^"]*"/g,'').replace(value,`/${asset}?v=${version}`);
       sealed=sealed.replace(tag,clean.replace(/>$/,` integrity="${integrity}" crossorigin="anonymous">`));
     }
     await writeFile(path.join(root,file),sealed);
