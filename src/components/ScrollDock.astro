@@ -8,11 +8,13 @@ const {whatsapp=defaultWhatsapp}=Astro.props;
       <defs>
         <mask id="lokma-cutout"><path fill="white" fill-rule="evenodd" d="M35 7C50 6 61 14 66 28C71 43 64 58 50 64C35 71 18 66 9 55C0 44 4 25 14 16C21 10 27 8 35 7ZM38 24C33 24 29 29 29 35C29 41 33 45 38 44C44 43 47 37 46 32C45 27 42 24 38 24Z"/></mask>
         <filter id="lokma-silver"><feColorMatrix type="saturate" values="0"/></filter>
-        <clipPath id="lokma-reveal"><rect data-scroll-progress x="0" y="72" width="72" height="0"/></clipPath>
+        <radialGradient id="lokma-syrup"><stop stop-color="#fff8df" stop-opacity=".9"/><stop offset=".35" stop-color="#ffd68a" stop-opacity=".5"/><stop offset="1" stop-color="#ffd68a" stop-opacity="0"/></radialGradient>
+        <clipPath id="lokma-reveal"><rect data-scroll-progress x="0" y="0" width="72" height="0"/></clipPath>
       </defs>
       <g mask="url(#lokma-cutout)">
         <image href="/images/lokma-real-appetizing.webp" x="-98" y="-22" width="256" height="192" filter="url(#lokma-silver)"/>
         <image href="/images/lokma-real-appetizing.webp" x="-98" y="-22" width="256" height="192" clip-path="url(#lokma-reveal)"/>
+        <g clip-path="url(#lokma-reveal)"><ellipse class="lokma-glint" data-scroll-glint cx="36" cy="-1" rx="34" ry="5" fill="url(#lokma-syrup)"/></g>
       </g>
     </svg>
     <span class="dock-hint">Lokmaya dokun, başa dön</span>
