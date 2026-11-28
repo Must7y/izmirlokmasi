@@ -44,8 +44,26 @@ test('lokma progress clamps overscroll, coalesces scroll events and survives sho
  const document={documentElement:{scrollHeight:2400},querySelector:s=>s==='[data-scroll-progress]'?progress:null,querySelectorAll:()=>[],getElementById:()=>null};
  const window={innerHeight:800,scrollY:0,matchMedia:()=>({matches:true}),addEventListener:(name,fn)=>handlers.set(name,fn),requestAnimationFrame:fn=>frames.push(fn)};
  vm.runInNewContext(source,{document,window});assert.equal(offset,0);
- window.scrollY=800;handlers.get('scroll')();handlers.get('scroll')();assert.equal(frames.length,1);frames.shift()();assert.equal(offset,36);
- window.scrollY=3000;handlers.get('scroll')();frames.shift()();assert.equal(offset,72);
+ window.scrollY=800;handlers.get('scroll')();handlers.get('scroll')();assert.equal(frames.length,1);frames.shift()();assert.equal(offset,36);assert.equal(values.y,0);
+ window.scrollY=3000;handlers.get('scroll')();frames.shift()();assert.equal(offset,72);assert.equal(values.y,0);
  window.scrollY=-100;handlers.get('scroll')();frames.shift()();assert.equal(offset,0);
  document.documentElement.scrollHeight=300;handlers.get('resize')();frames.shift()();assert.equal(offset,0);
+});
+
+test('syrup glint follows the colour boundary, stops on upward scroll and respects reduced motion',()=>{
+ const handlers=new Map(),frames=[],animations=[],transforms=[];
+ let reduce=false,cancelled=0;
+ const glint={setAttribute:(key,value)=>transforms.push(value),animate:(keys,options)=>{animations.push(options);return {cancel(){cancelled++;}};}};
+ const progress={setAttribute(){}};
+ const document={documentElement:{scrollHeight:2400},querySelector:s=>s==='[data-scroll-progress]'?progress:s==='[data-scroll-glint]'?glint:null,querySelectorAll:()=>[],getElementById:()=>null};
+ const window={innerHeight:800,scrollY:0,matchMedia:()=>({get matches(){return reduce;}}),addEventListener:(name,fn)=>handlers.set(name,fn),requestAnimationFrame:fn=>frames.push(fn)};
+ vm.runInNewContext(source,{document,window});
+ const scroll=y=>{window.scrollY=y;handlers.get('scroll')();frames.shift()();};
+ assert.equal(animations.length,0);
+ scroll(100);assert.equal(animations.length,0);
+ scroll(400);assert.equal(animations.length,1);assert.equal(transforms.at(-1),'translate(0 18)');
+ assert.equal(animations[0].duration,650);assert.equal(animations[0].iterations,undefined);
+ scroll(200);assert.equal(animations.length,1);assert.equal(cancelled,1);
+ reduce=true;scroll(800);assert.equal(animations.length,1);
+ reduce=false;scroll(1600);assert.equal(animations.length,1);
 });
